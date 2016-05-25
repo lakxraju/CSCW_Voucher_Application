@@ -1,4 +1,6 @@
 from flask import Flask
+from flask import request
+from flask import Response
 from bigchaindb import Bigchain
 from bigchaindb import crypto
 import rethinkdb as r
@@ -22,7 +24,10 @@ def checkIfTheUserExists(userName):
 
 @app.route('/voucherApp/createUser', methods=['GET'])
 def createUser():
-    return ""
+    username = request.args.get('username')
+    password = request.args.get('password')
+    type = request.args.get('type')
+    return username+password+type
 
 
 
