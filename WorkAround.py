@@ -39,5 +39,6 @@ r.db("bigchain").table("user_table").insert(data).run(conn)
 return_data = r.db("bigchain").table("user_table").get("lrajendran").run(conn)
 print(return_data)
 print(return_data["password"])
+print(return_data["private_key"])
 
 
