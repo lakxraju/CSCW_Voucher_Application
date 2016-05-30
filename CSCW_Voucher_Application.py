@@ -1,6 +1,5 @@
 from flask import Flask
 from flask import request
-from flask import Response
 from bigchaindb import Bigchain
 from bigchaindb import crypto
 import rethinkdb as r
