@@ -36,9 +36,12 @@ json_data = json.dumps(data)
 print(json_data)
 r.db("bigchain").table("user_table").insert(data).run(conn)
 '''
-return_data = r.db("bigchain").table("user_table").get("lrajendran").run(conn)
+return_data = r.db("bigchain").table("user_table").get("lrajendran").count().run(conn)
 print(return_data)
-print(return_data["password"])
-print(return_data["private_key"])
+print(return_data>0)
+if(return_data>0):
+    print("Hello")
+#print(return_data["password"])
+#print(return_data["private_key"])
 
 
