@@ -3,6 +3,7 @@ from flask import request
 from flask import jsonify
 from bigchaindb import Bigchain
 from bigchaindb import crypto
+from flask_restful import reqparse
 import rethinkdb as r
 import time
 from enum import Enum
@@ -39,6 +40,13 @@ conn = r.connect("localhost", 28015)
 
 @app.route('/voucherApp/createUser', methods=['POST'])
 def createUser():
+    # Specifying Mandatory Arguments
+    parser = reqparse.RequestParser()
+    parser.add_argument(UserAttributes.USERNAME,required=True, type=str)
+    parser.add_argument(UserAttributes.PASSWORD, required=True, type=str)
+    parser.add_argument(UserAttributes.TYPE, required=True, type=str)
+
+
     username = request.args.get(UserAttributes.USERNAME)
     password = request.args.get(UserAttributes.PASSWORD)
     type = request.args.get(UserAttributes.TYPE)
@@ -54,6 +62,11 @@ def createUser():
 
 @app.route('/voucherApp/signIn',methods=['POST'])
 def signIn():
+    # Specifying Mandatory Arguments
+    parser = reqparse.RequestParser()
+    parser.add_argument(UserAttributes.USERNAME, required=True, type=str)
+    parser.add_argument(UserAttributes.PASSWORD, required=True, type=str)
+
     username = request.args.get(UserAttributes.USERNAME)
     password = request.args.get(UserAttributes.PASSWORD)
 
@@ -69,6 +82,13 @@ def signIn():
 
 @app.route('/voucherApp/createVoucher',methods=['POST'])
 def createVoucher():
+    # Specifying Mandatory Arguments
+    parser = reqparse.RequestParser()
+    parser.add_argument(UserAttributes.USERNAME, required=True, type=str)
+    parser.add_argument('value', required=True, type=str)
+    parser.add_argument('voucher_name', required=True, type=str)
+
+
     voucherName = request.args.get('voucher_name')
     username = request.args.get(UserAttributes.USERNAME)
     value = request.args.get('value')
@@ -89,6 +109,10 @@ def createVoucher():
 
 @app.route('/voucherApp/getOwnedIDs',methods=['GET'])
 def getOwnedIDs():
+    # Specifying Mandatory Arguments
+    parser = reqparse.RequestParser()
+    parser.add_argument(UserAttributes.USERNAME, required=True, type=str)
+
     username = request.args.get(UserAttributes.USERNAME)
     if (not checkIfTheUserExists(username)):
         return jsonify(status="error", errorMessage="User doesn't exist!")
@@ -99,6 +123,14 @@ def getOwnedIDs():
 
 @app.route('/voucherApp/transferVoucher',methods=['POST'])
 def transferVoucher():
+    # Specifying Mandatory Arguments
+    parser = reqparse.RequestParser()
+    parser.add_argument(UserAttributes.TARGET_USERNAME, required=True, type=str)
+    parser.add_argument(UserAttributes.SOURCE_USERNAME, required=True, type=str)
+    parser.add_argument(UserAttributes.PRIVATE_KEY, required=True, type=str)
+    parser.add_argument('asset_id', required=True, type=str)
+
+
     source_username = request.args.get(UserAttributes.SOURCE_USERNAME)
     target_username = request.args.get(UserAttributes.TARGET_USERNAME)
     sourceuser_priv_key = request.args.get(UserAttributes.PRIVATE_KEY)
