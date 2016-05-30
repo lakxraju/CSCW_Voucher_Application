@@ -38,7 +38,11 @@ conn = r.connect("localhost", 28015)
 
 
 @app.route('/voucherApp/createUser', methods=['POST'])
-def createUser(username=request.args.get(UserAttributes.USERNAME),password=request.args.get(UserAttributes.PASSWORD),type = request.args.get(UserAttributes.TYPE)):
+def createUser():
+    username = request.args.get(UserAttributes.USERNAME)
+    password = request.args.get(UserAttributes.PASSWORD)
+    type = request.args.get(UserAttributes.TYPE)
+
     if(not checkIfTheUserExists(username)):
         user_priv, user_pub = crypto.generate_key_pair()
         userTuple = constructUserTuple(username,password,type,user_priv,user_pub)
@@ -49,7 +53,10 @@ def createUser(username=request.args.get(UserAttributes.USERNAME),password=reque
 
 
 @app.route('/voucherApp/signIn',methods=['POST'])
-def signIn(username = request.args.get(UserAttributes.USERNAME),password=request.args.get(UserAttributes.PASSWORD)):
+def signIn():
+    username = request.args.get(UserAttributes.USERNAME)
+    password = request.args.get(UserAttributes.PASSWORD)
+
     if(checkIfTheUserExists(username)):
         tupleData = getTupleFromDB(TableNames.USER,username)
         if(tupleData[UserAttributes.PASSWORD] == password):
@@ -61,7 +68,11 @@ def signIn(username = request.args.get(UserAttributes.USERNAME),password=request
 
 
 @app.route('/voucherApp/createVoucher',methods=['POST'])
-def createVoucher(voucherName = request.args.get('voucher_name'),username=request.args.get(UserAttributes.USERNAME), value = request.args.get('value')):
+def createVoucher():
+    voucherName = request.args.get('voucher_name')
+    username = request.args.get(UserAttributes.USERNAME)
+    value = request.args.get('value')
+
     if(not checkIfTheUserExists(username)):
         return jsonify(status="error", errorMessage="User doesn't exist!")
     else:
@@ -77,7 +88,8 @@ def createVoucher(voucherName = request.args.get('voucher_name'),username=reques
 
 
 @app.route('/voucherApp/getOwnedIDs',methods=['GET'])
-def getOwnedIDs(username=request.args.get(UserAttributes.USERNAME)):
+def getOwnedIDs():
+    username = request.args.get(UserAttributes.USERNAME)
     if (not checkIfTheUserExists(username)):
         return jsonify(status="error", errorMessage="User doesn't exist!")
     else:
@@ -86,7 +98,11 @@ def getOwnedIDs(username=request.args.get(UserAttributes.USERNAME)):
 
 
 @app.route('/voucherApp/transferVoucher',methods=['POST'])
-def getOwnedIDs(source_username=request.args.get(UserAttributes.SOURCE_USERNAME),target_username=request.args.get(UserAttributes.TARGET_USERNAME),sourceuser_priv_key = request.args.get(UserAttributes.PRIVATE_KEY),asset_id=request.args.get('asset_id')):
+def transferVoucher():
+    source_username = request.args.get(UserAttributes.SOURCE_USERNAME)
+    target_username = request.args.get(UserAttributes.TARGET_USERNAME)
+    sourceuser_priv_key = request.args.get(UserAttributes.PRIVATE_KEY)
+    asset_id = request.args.get('asset_id')
     if (not checkIfTheUserExists(target_username)):
         return jsonify(status="error", errorMessage="Target User doesn't exist!")
     elif(not checkIfTheUserExists(source_username)):
