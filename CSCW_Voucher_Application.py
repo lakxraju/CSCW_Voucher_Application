@@ -17,8 +17,8 @@ class UserAttributes(Enum):
     USERNAME = "username"
     PASSWORD = "password"
     TYPE = "type"
-    SOURCE_USERNAME = "source_public_key"
-    TARGET_USERNAME = "target_public_key"
+    SOURCE_USERNAME = "source_username"
+    TARGET_USERNAME = "target_username"
 
 
 class UserType(Enum):
@@ -140,8 +140,8 @@ def transferVoucher():
     elif(not checkIfTheUserExists(source_username)):
         return jsonify(status="error", errorMessage="Source User doesn't exist!")
     else:
-        target_user_pub_key = getTupleFromDB(TableNames.USER, target_username)[UserAttributes.USERNAME]
-        source_user_pub_key = getTupleFromDB(TableNames.USER, source_username)[UserAttributes.USERNAME]
+        target_user_pub_key = getTupleFromDB(TableNames.USER, target_username)[UserAttributes.PUBLIC_KEY]
+        source_user_pub_key = getTupleFromDB(TableNames.USER, source_username)[UserAttributes.PUBLIC_KEY]
         tx_transfer = b.create_transaction(source_user_pub_key, target_user_pub_key, asset_id, Operations.TRANSFER)
         tx_transfer_signed = b.sign_transaction(tx_transfer, sourceuser_priv_key)
         b.write_transaction(tx_transfer_signed)
