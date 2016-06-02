@@ -23,9 +23,9 @@ class UserAttributes(Enum):
 
 
 class UserType(Enum):
-    DONOR = 1
-    CONSUMER = 2
-    COMPANY = 3
+    DONOR = "1"
+    CONSUMER = "2"
+    COMPANY = "3"
 
 class Operations(Enum):
     CREATE = "CREATE"
@@ -96,6 +96,8 @@ def createVoucher():
 
     if(not checkIfTheUserExists(username)):
         return jsonify(status="error", errorMessage="User doesn't exist!")
+    elif(not UserType.DONOR.value == getUserType(username)):
+        return jsonify(status="error", errorMessage="Invalid Operation for the current User!")
     else:
         voucherPayload = {}
         voucherPayload["name"] = voucherName
@@ -106,6 +108,13 @@ def createVoucher():
         b.write_transaction(tx_signed)
         time.sleep(5)
         return jsonify(status="success",message="Voucher Created Successfully")
+
+
+@app.route('/',methods=['GET','POST'])
+def testConnection():
+    return jsonify(status="success", errorMessage="Server Available!")
+
+
 
 
 @app.route('/voucherApp/getOwnedIDs',methods=['GET'])
@@ -119,7 +128,18 @@ def getOwnedIDs():
         return jsonify(status="error", errorMessage="User doesn't exist!")
     else:
         user_pub_key = getTupleFromDB(TableNames.USER.value, username)[UserAttributes.PUBLIC_KEY.value]
-        return jsonify(data = b.get_owned_ids(user_pub_key))
+        ownedIDs = b.get_owned_ids(user_pub_key)
+        for k in ownedIDs:
+            txn = b.get_transaction(k["txid"])
+            k["name"] = txn["transaction"]["data"]["payload"]["name"]
+            k["value"] = txn["transaction"]["data"]["payload"]["value"]
+
+        userData = {}
+        userData["txnDetails"] = ownedIDs
+        userData["username"] = username
+        userData["usertype"] = getUserType(username)
+
+        return json.dumps(userData)
 
 
 @app.route('/voucherApp/transferVoucher',methods=['POST'])
@@ -130,28 +150,33 @@ def transferVoucher():
     parser.add_argument(UserAttributes.SOURCE_USERNAME.value, required=True, type=str)
     parser.add_argument(UserAttributes.PRIVATE_KEY.value, required=True, type=str)
     parser.add_argument('asset_id', required=True, type=str)
+    parser.add_argument('cid', required=True, type=str)
 
 
     source_username = request.get_json(force=False)[UserAttributes.SOURCE_USERNAME.value]
     target_username = request.get_json(force=False)[UserAttributes.TARGET_USERNAME.value]
     sourceuser_priv_key = request.get_json(force=False)[UserAttributes.PRIVATE_KEY.value]
     asset_id = request.get_json(force=False)['asset_id']
+    cid = request.get_json(force=False)['cid']
+
     if (not checkIfTheUserExists(target_username)):
         return jsonify(status="error", errorMessage="Target User doesn't exist!")
     elif(not checkIfTheUserExists(source_username)):
         return jsonify(status="error", errorMessage="Source User doesn't exist!")
+    elif(not isTransferValid(source_username,target_username)):
+        return jsonify(status="error", errorMessage="Transaction is not valid between the intended Users!")
     else:
         target_user_pub_key = getTupleFromDB(TableNames.USER.value, target_username)[UserAttributes.PUBLIC_KEY.value]
         source_user_pub_key = getTupleFromDB(TableNames.USER.value, source_username)[UserAttributes.PUBLIC_KEY.value]
         print(sourceuser_priv_key)
         tx = {}
         tx["txid"] = asset_id
-        tx["cid"] = 0
+        tx["cid"] = cid
         tx_transfer = b.create_transaction(source_user_pub_key, target_user_pub_key, tx, Operations.TRANSFER.value)
         tx_transfer_signed = b.sign_transaction(tx_transfer, sourceuser_priv_key)
         b.write_transaction(tx_transfer_signed)
         time.sleep(5)
-        return jsonify(status="success", errorMessage="Voucher Successfully Trasferred")
+        return jsonify(status="success", Message="Voucher Successfully Trasferred")
 
 
 # Following are the utility methods
@@ -172,6 +197,27 @@ def constructUserTuple(username, password, type, public_key,private_key):
     data[UserAttributes.PUBLIC_KEY.value] = public_key
     data[UserAttributes.PRIVATE_KEY.value] = private_key
     return data
+
+def getUserType(username):
+    userTuple = getTupleFromDB(TableNames.USER.value,username)
+    if(userTuple[UserAttributes.TYPE.value]=="1"):
+        return UserType.DONOR.value
+    elif(userTuple[UserAttributes.TYPE.value]=="2"):
+        return UserType.CONSUMER.value
+    elif(userTuple[UserAttributes.TYPE.value]=="3"):
+        return UserType.COMPANY.value
+
+def isTransferValid(username1,username2):
+    userType1 = getUserType(username1)
+    userType2 = getUserType(username2)
+    if(userType1==UserType.DONOR.value and userType2==UserType.CONSUMER.value):
+        return True
+    elif(userType1==UserType.CONSUMER.value and userType2==UserType.COMPANY.value):
+        return True
+    elif(userType1==UserType.COMPANY.value and userType2==UserType.DONOR.value):
+        return True
+    else:
+        return False
 
 def getTupleFromDB(tableName,primary_key):
     return r.db("bigchain").table(tableName).get(primary_key).run(conn)
