@@ -106,8 +106,20 @@ def createVoucher():
         tx = b.create_transaction(b.me, user_pub_key, None, Operations.CREATE.value, payload=voucherPayload)
         tx_signed = b.sign_transaction(tx, b.me_private)
         b.write_transaction(tx_signed)
-        time.sleep(5)
-        return jsonify(status="success",message="Voucher Created Successfully")
+        #b.validate_transaction(tx_signed)
+        time.sleep(10)
+        ownedIDs = b.get_owned_ids(user_pub_key)
+        for k in ownedIDs:
+            txn = b.get_transaction(k["txid"])
+            k["name"] = txn["transaction"]["data"]["payload"]["name"]
+            k["value"] = txn["transaction"]["data"]["payload"]["value"]
+
+        userData = {}
+        userData["txnDetails"] = ownedIDs
+        userData["username"] = username
+        userData["usertype"] = getUserType(username)
+
+        return json.dumps(userData)
 
 
 @app.route('/',methods=['GET','POST'])
@@ -131,6 +143,7 @@ def getOwnedIDs():
         ownedIDs = b.get_owned_ids(user_pub_key)
         for k in ownedIDs:
             txn = b.get_transaction(k["txid"])
+            print(txn)
             k["name"] = txn["transaction"]["data"]["payload"]["name"]
             k["value"] = txn["transaction"]["data"]["payload"]["value"]
 
@@ -172,10 +185,14 @@ def transferVoucher():
         tx = {}
         tx["txid"] = asset_id
         tx["cid"] = cid
-        tx_transfer = b.create_transaction(source_user_pub_key, target_user_pub_key, tx, Operations.TRANSFER.value)
+        asset = b.get_transaction(asset_id)
+        print(asset)
+        print(asset["transaction"]["data"]["payload"])
+        tx_transfer = b.create_transaction(source_user_pub_key, target_user_pub_key, tx, Operations.TRANSFER.value,payload=asset["transaction"]["data"]["payload"])
         tx_transfer_signed = b.sign_transaction(tx_transfer, sourceuser_priv_key)
         b.write_transaction(tx_transfer_signed)
-        time.sleep(5)
+        #b.validate_transaction(tx_transfer_signed)
+        time.sleep(10)
         return jsonify(status="success", Message="Voucher Successfully Trasferred")
 
 
