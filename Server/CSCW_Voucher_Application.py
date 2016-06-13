@@ -43,10 +43,10 @@ class DatabaseNames(Enum):
 b = Bigchain()
 conn = r.connect("localhost", 28015)
 #Adding the user database and table if it does't exist
-if not r.dbList().contains(DatabaseNames.CUSTOM_DB.value).run(conn):
-    r.dbCreate(DatabaseNames.CUSTOM_DB.value).run(conn)
-if not r.db(DatabaseNames.CUSTOM_DB.value).tableList().contains(TableNames.USER.value).run(conn):
-    r.db(DatabaseNames.CUSTOM_DB.value).tableCreate(TableNames.USER.value,{'primary_key':'username'}).run(conn)
+if not r.db_list().contains(DatabaseNames.CUSTOM_DB.value).run(conn):
+    r.db_create(DatabaseNames.CUSTOM_DB.value).run(conn)
+if not r.db(DatabaseNames.CUSTOM_DB.value).table_list().contains(TableNames.USER.value).run(conn):
+    r.db(DatabaseNames.CUSTOM_DB.value).table_create(TableNames.USER.value,primary_key='username').run(conn)
 
 @app.route('/voucherApp/createUser', methods=['POST'])
 def createUser():
@@ -216,7 +216,7 @@ def transferVoucher():
 # Following are the utility methods
 
 def checkIfTheUserExists(userName):
-    return_data = r.db("bigchain").table(TableNames.USER.value).get(userName).count().default(0).run(conn)
+    return_data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).get(userName).count().default(0).run(conn)
     if(return_data >0):
         return True
     else:
