@@ -35,9 +35,17 @@ class TableNames(Enum):
     USER = "user_table"
     BIGCHAIN = "bigchain"
 
+class DatabaseNames(Enum):
+    CUSTOM_DB = "custom_db"
+    BIGCHAIN = "bigchain"
+
 b = Bigchain()
 conn = r.connect("localhost", 28015)
-
+#Adding the userdatabase and table if it does't exist
+if not r.dbList().contains(DatabaseNames.CUSTOM_DB.value).run(conn):
+    r.dbCreate(DatabaseNames.CUSTOM_DB.value).run(conn)
+if not r.db(DatabaseNames.CUSTOM_DB.value).tableList().contains(TableNames.USER.value).run(conn):
+    r.db(DatabaseNames.CUSTOM_DB.value).tableCreate(TableNames.USER.value,{'primary_key':'username'}).run(conn)
 
 @app.route('/voucherApp/createUser', methods=['POST'])
 def createUser():
@@ -55,7 +63,7 @@ def createUser():
     if(not checkIfTheUserExists(username)):
         user_priv, user_pub = crypto.generate_key_pair()
         userTuple = constructUserTuple(username,password,type,user_pub,user_priv)
-        insertData(TableNames.USER.value,userTuple)
+        insertData(DatabaseNames.CUSTOM_DB.value,TableNames.USER.value,userTuple)
         return jsonify(status="success",publicKey=user_pub,privateKey=user_priv)
     else:
         return jsonify(status="error", errorMessage="Username Already Exists!")
@@ -72,7 +80,7 @@ def signIn():
     password = request.get_json(force=False)[UserAttributes.PASSWORD.value]
 
     if(checkIfTheUserExists(username)):
-        tupleData = getTupleFromDB(TableNames.USER.value,username)
+        tupleData = getTupleFromDB(DatabaseNames.CUSTOM_DB.value,TableNames.USER.value,username)
         if(tupleData[UserAttributes.PASSWORD.value] == password):
             return jsonify(status="success",publicKey=tupleData[UserAttributes.PUBLIC_KEY.value],privateKey=tupleData[UserAttributes.PRIVATE_KEY.value])
         else:
@@ -102,7 +110,7 @@ def createVoucher():
         voucherPayload = {}
         voucherPayload["name"] = voucherName
         voucherPayload["value"] = value
-        user_pub_key = getTupleFromDB(TableNames.USER.value,username)[UserAttributes.PUBLIC_KEY.value]
+        user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value,TableNames.USER.value,username)[UserAttributes.PUBLIC_KEY.value]
         tx = b.create_transaction(b.me, user_pub_key, None, Operations.CREATE.value, payload=voucherPayload)
         tx_signed = b.sign_transaction(tx, b.me_private)
         userData = {}
@@ -142,7 +150,7 @@ def getOwnedIDs():
     if (not checkIfTheUserExists(username)):
         return jsonify(status="error", errorMessage="User doesn't exist!")
     else:
-        user_pub_key = getTupleFromDB(TableNames.USER.value, username)[UserAttributes.PUBLIC_KEY.value]
+        user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value,TableNames.USER.value, username)[UserAttributes.PUBLIC_KEY.value]
         ownedIDs = b.get_owned_ids(user_pub_key)
         for k in ownedIDs:
             txn = b.get_transaction(k["txid"])
@@ -182,8 +190,8 @@ def transferVoucher():
     elif(not isTransferValid(source_username,target_username)):
         return jsonify(status="error", errorMessage="Transaction is not valid between the intended Users!")
     else:
-        target_user_pub_key = getTupleFromDB(TableNames.USER.value, target_username)[UserAttributes.PUBLIC_KEY.value]
-        source_user_pub_key = getTupleFromDB(TableNames.USER.value, source_username)[UserAttributes.PUBLIC_KEY.value]
+        target_user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value,TableNames.USER.value, target_username)[UserAttributes.PUBLIC_KEY.value]
+        source_user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value,TableNames.USER.value, source_username)[UserAttributes.PUBLIC_KEY.value]
         print(sourceuser_priv_key)
         tx = {}
         tx["txid"] = asset_id
@@ -224,7 +232,7 @@ def constructUserTuple(username, password, type, public_key,private_key):
     return data
 
 def getUserType(username):
-    userTuple = getTupleFromDB(TableNames.USER.value,username)
+    userTuple = getTupleFromDB(DatabaseNames.CUSTOM_DB.value,TableNames.USER.value,username)
     if(userTuple[UserAttributes.TYPE.value]=="1"):
         return UserType.DONOR.value
     elif(userTuple[UserAttributes.TYPE.value]=="2"):
@@ -244,11 +252,11 @@ def isTransferValid(username1,username2):
     else:
         return False
 
-def getTupleFromDB(tableName,primary_key):
-    return r.db("bigchain").table(tableName).get(primary_key).run(conn)
+def getTupleFromDB(dbName,tableName,primary_key):
+    return r.db(dbName).table(tableName).get(primary_key).run(conn)
 
-def insertData(tableName,data):
-    r.db("bigchain").table(tableName).insert(data).run(conn)
+def insertData(dbName,tableName,data):
+    r.db(dbName).table(tableName).insert(data).run(conn)
 
 
 if __name__ == '__main__':
