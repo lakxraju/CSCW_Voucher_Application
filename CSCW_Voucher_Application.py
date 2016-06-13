@@ -105,19 +105,22 @@ def createVoucher():
         user_pub_key = getTupleFromDB(TableNames.USER.value,username)[UserAttributes.PUBLIC_KEY.value]
         tx = b.create_transaction(b.me, user_pub_key, None, Operations.CREATE.value, payload=voucherPayload)
         tx_signed = b.sign_transaction(tx, b.me_private)
-        b.write_transaction(tx_signed)
-        #b.validate_transaction(tx_signed)
-        time.sleep(10)
-        ownedIDs = b.get_owned_ids(user_pub_key)
-        for k in ownedIDs:
-            txn = b.get_transaction(k["txid"])
-            k["name"] = txn["transaction"]["data"]["payload"]["name"]
-            k["value"] = txn["transaction"]["data"]["payload"]["value"]
-
         userData = {}
-        userData["txnDetails"] = ownedIDs
-        userData["username"] = username
-        userData["usertype"] = getUserType(username)
+
+        if b.is_valid_transaction(tx_signed):
+            b.write_transaction(tx_signed)
+            #b.validate_transaction(tx_signed)
+            time.sleep(10)
+            ownedIDs = b.get_owned_ids(user_pub_key)
+            for k in ownedIDs:
+                txn = b.get_transaction(k["txid"])
+                k["name"] = txn["transaction"]["data"]["payload"]["name"]
+                k["value"] = txn["transaction"]["data"]["payload"]["value"]
+            userData["txnDetails"] = ownedIDs
+            userData["username"] = username
+            userData["usertype"] = getUserType(username)
+        else:
+            return jsonify(status="error", errorMessage="Transaction not valid!")
 
         return json.dumps(userData)
 
@@ -186,14 +189,19 @@ def transferVoucher():
         tx["txid"] = asset_id
         tx["cid"] = cid
         asset = b.get_transaction(asset_id)
-        print(asset)
-        print(asset["transaction"]["data"]["payload"])
         tx_transfer = b.create_transaction(source_user_pub_key, target_user_pub_key, tx, Operations.TRANSFER.value,payload=asset["transaction"]["data"]["payload"])
         tx_transfer_signed = b.sign_transaction(tx_transfer, sourceuser_priv_key)
-        b.write_transaction(tx_transfer_signed)
-        #b.validate_transaction(tx_transfer_signed)
-        time.sleep(10)
-        return jsonify(status="success", Message="Voucher Successfully Trasferred")
+
+        if b.is_valid_transaction(tx_transfer_signed):
+            b.write_transaction(tx_transfer_signed)
+            #b.validate_transaction(tx_transfer_signed)
+            time.sleep(10)
+            return jsonify(status="success", message="Voucher Successfully Trasferred")
+        else:
+            print("Error While transferring an asset: Not a valid Transaction!")
+            print("Source Username:"+ source_username + "   --Source Pub Key:"+ source_user_pub_key)
+            print("Target Username:"+ target_username + "   --Target Pub Key:"+ target_user_pub_key)
+            return jsonify(status="error", errorMessage="Transaction is not valid")
 
 
 # Following are the utility methods
