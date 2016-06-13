@@ -6,11 +6,12 @@ from bigchaindb import Bigchain
 from bigchaindb import crypto
 from flask_restful import reqparse
 import rethinkdb as r
+from flask.ext.cors import CORS
 import time
 from enum import Enum
 
 app = Flask(__name__)
-
+CORS(app)
 
 class UserAttributes(Enum):
     PUBLIC_KEY = "public_key"
