@@ -8,7 +8,7 @@ setup(
     description='Digital Voucher Application as an alternative for sodexo like vouchers',
     long_description=__doc__,
     url='https://github.com/lakxraju/CSCW_Voucher_Application/',
-    author='Lakshminarayanan Rajendran',
+    author='Lakshminarayanan Rajendran,Sharath Chandra, Touhidur Rahman',
     author_email='lakxraju@gmail.com',
     zip_safe=False,
 

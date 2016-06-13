@@ -41,7 +41,7 @@ class DatabaseNames(Enum):
 
 b = Bigchain()
 conn = r.connect("localhost", 28015)
-#Adding the userdatabase and table if it does't exist
+#Adding the user database and table if it does't exist
 if not r.dbList().contains(DatabaseNames.CUSTOM_DB.value).run(conn):
     r.dbCreate(DatabaseNames.CUSTOM_DB.value).run(conn)
 if not r.db(DatabaseNames.CUSTOM_DB.value).tableList().contains(TableNames.USER.value).run(conn):
