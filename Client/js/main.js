@@ -4,6 +4,8 @@ var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute","ngCooki
  * Configure the Routes
  */
 var IPAddress="192.168.43.34:5000"
+
+
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
 
