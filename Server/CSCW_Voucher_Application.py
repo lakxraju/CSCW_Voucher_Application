@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,render_template,send_from_directory
 from flask import request
 from flask import jsonify
 from flask import json
@@ -8,6 +8,7 @@ from flask_restful import reqparse
 import rethinkdb as r
 from flask.ext.cors import CORS
 import time
+import os
 from enum import Enum
 
 app = Flask(__name__)
@@ -134,11 +135,25 @@ def createVoucher():
         return json.dumps(userData)
 
 
-@app.route('/',methods=['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
 def testConnection():
-    return jsonify(status="success", errorMessage="Server Available!")
+    return render_template("index.html")
 
 
+@app.route('/Client/<path:path>',methods=['GET'])
+def sendStaticFile(path):
+    print("/Client/"+path)
+    return send_from_directory(os.path.dirname(os.getcwd())+"/Client/",path)
+
+@app.route('/templates/<path:path>',methods=['GET'])
+def sendStaticFile1(path):
+    print("/Client/"+path)
+    return send_from_directory(os.path.dirname(os.getcwd())+"/Client/templates/",path)
+
+@app.route('/partials/<path:path>',methods=['GET'])
+def sendStaticFile2(path):
+    print("/Client/"+path)
+    return send_from_directory(os.path.dirname(os.getcwd())+"/Client/partials/",path)
 
 
 @app.route('/voucherApp/getOwnedIDs',methods=['GET'])
