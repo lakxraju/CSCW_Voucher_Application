@@ -188,6 +188,7 @@ def getOwnedIDs():
         userData["txnDetails"] = ownedIDs
         userData["username"] = username
         userData["usertype"] = getUserType(username)
+        userData = [userData]
 
         return json.dumps(userData)
 
@@ -271,6 +272,23 @@ def getUserType(username):
     elif (userTuple[UserAttributes.TYPE.value] == "3"):
         return UserType.COMPANY.value
 
+@app.route('/voucherApp/companys', methods=['GET'])
+def getCompanyList():
+    data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).filter({'type': UserType.COMPANY.value}).pluck('username').run(conn)
+    dataList = list(data)
+    return json.dumps(dataList)
+
+@app.route('/voucherApp/donors', methods=['GET'])
+def getDonorList():
+    data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).filter({'type': UserType.DONOR.value}).pluck('username').run(conn)
+    dataList = list(data)
+    return json.dumps(dataList)
+
+@app.route('/voucherApp/customers', methods=['GET'])
+def getCustomerList():
+    data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).filter({'type': UserType.CONSUMER.value}).pluck('username').run(conn)
+    dataList = list(data)
+    return json.dumps(dataList)
 
 def isTransferValid(username1, username2, voucher):
     userType1 = getUserType(username1)
