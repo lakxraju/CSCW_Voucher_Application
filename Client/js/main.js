@@ -8,7 +8,8 @@ var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute", "ngCook
 /**
  * Configure the Routes
  */
-var IPAddress = "192.168.43.32:5000"
+//var IPAddress = "10.144.103.72:5000"
+var IPAddress = "10.144.103.72:5000"
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
 
@@ -235,7 +236,6 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
                 }).success(function (data) {
 
                     console.log(data);
-
                     $window.location.reload();
 
                 });
@@ -330,8 +330,10 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
             console.log(data);
 
             $uibModalInstance.close();
-
-            $window.location.reload();
+            if(data.status == "error")
+                alert(data.errorMessage);
+            else
+                $window.location.reload();
 
         });
 

@@ -11,6 +11,8 @@ import time
 import os
 from enum import Enum
 
+from werkzeug.debug import DebuggedApplication
+
 app = Flask(__name__)
 CORS(app)
 
@@ -113,10 +115,16 @@ def createVoucher():
         return jsonify(status="error", errorMessage="User doesn't exist!")
     elif (not UserType.DONOR.value == getUserType(username)):
         return jsonify(status="error", errorMessage="Invalid Operation for the current User!")
+    elif (not checkIfTheUserExists(voucherName)):
+        return jsonify(status="error", errorMessage="Company doesn't exist! Please check the name of the voucher!")
+    elif (not UserType.COMPANY.value == getUserType(voucherName)):
+        return jsonify(status="error", errorMessage="Voucher name is not valid! Hint: Voucher name should match a company")
     else:
         voucherPayload = {}
         voucherPayload["name"] = voucherName # its also the company name
         voucherPayload["value"] = value
+        voucherPayload["from"] = username
+        voucherPayload["to"] = username
         voucherPayload["donor_name"] = username
         user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, username)[
             UserAttributes.PUBLIC_KEY.value]
@@ -133,6 +141,8 @@ def createVoucher():
                 txn = b.get_transaction(k["txid"])
                 k["name"] = txn["transaction"]["data"]["payload"]["name"]
                 k["value"] = txn["transaction"]["data"]["payload"]["value"]
+                k["from"] = txn["transaction"]["data"]["payload"]["from"]
+                k["to"] = txn["transaction"]["data"]["payload"]["to"]
             userData["txnDetails"] = ownedIDs
             userData["username"] = username
             userData["usertype"] = getUserType(username)
@@ -142,7 +152,7 @@ def createVoucher():
         return json.dumps(userData)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/Client/', methods=['GET', 'POST'])
 def testConnection():
     return render_template("index.html")
 
@@ -188,7 +198,7 @@ def getOwnedIDs():
         userData["txnDetails"] = ownedIDs
         userData["username"] = username
         userData["usertype"] = getUserType(username)
-        userData = [userData]
+        #userData = [userData]
 
         return json.dumps(userData)
 
@@ -226,8 +236,12 @@ def transferVoucher():
         tx["txid"] = asset_id
         tx["cid"] = cid
         # asset = b.get_transaction(asset_id)
+
+        newPayload = asset["transaction"]["data"]["payload"]
+        newPayload["from"] = source_username
+        newPayload["to"] = target_username
         tx_transfer = b.create_transaction(source_user_pub_key, target_user_pub_key, tx, Operations.TRANSFER.value,
-                                           payload=asset["transaction"]["data"]["payload"])
+                                           payload=newPayload)
         tx_transfer_signed = b.sign_transaction(tx_transfer, sourceuser_priv_key)
 
         if b.is_valid_transaction(tx_transfer_signed):
@@ -289,6 +303,34 @@ def getCustomerList():
     data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).filter({'type': UserType.CONSUMER.value}).pluck('username').run(conn)
     dataList = list(data)
     return json.dumps(dataList)
+
+@app.route('/voucherApp/getHistory', methods=['GET'])
+def get_owned_assets():
+    parser = reqparse.RequestParser()
+    parser.add_argument(UserAttributes.USERNAME.value, required=True, type=str)
+
+    public_key = request.args.get(UserAttributes.USERNAME.value)
+    tempresponse = r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).run(conn)
+   # response = list(tempresponse)
+    allPayloads = []
+    for temprow in tempresponse:
+        txns = temprow["block"]["transactions"]
+        block_timestamp = temprow["block"]["timestamp"]
+        for txn in txns:
+            temp = txn["transaction"]["data"]["payload"]
+            temp['txid'] = txn['id']
+            temp['timestamp'] = block_timestamp
+            if 'from' in temp and 'to' in temp and (temp['from'] == public_key or temp['to'] == public_key):
+
+                if temp['from'] == public_key and temp['to'] == public_key:
+                    temp['type'] = 'CREATE'
+                elif temp['from'] == public_key:
+                    temp['type'] = 'SENT'
+                elif temp['to'] == public_key:
+                    temp['type'] = 'RECEIVED'
+
+                allPayloads.append(temp)
+    return jsonify(history = allPayloads)
 
 def isTransferValid(username1, username2, voucher):
     userType1 = getUserType(username1)
