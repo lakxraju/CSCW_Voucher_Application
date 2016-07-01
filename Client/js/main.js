@@ -1,11 +1,14 @@
-var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute","ngCookies"]);
+/**
+ * @author SharathChandra
+ created on  01/07/2016
+ */
+
+var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute", "ngCookies", "blockUI", "smart-table"]);
 
 /**
  * Configure the Routes
  */
-var IPAddress="localhost:5000";
-
-
+var IPAddress = "192.168.43.32:5000"
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
 
@@ -16,7 +19,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 }]);
 
 
-app.controller('LoginCtrl', function ($scope, $http, $location, $cookies ) {
+app.controller('LoginCtrl', function ($scope, $http, $location, $cookies) {
 
     $scope.username = "";
     $scope.password = "";
@@ -26,57 +29,37 @@ app.controller('LoginCtrl', function ($scope, $http, $location, $cookies ) {
             var user = $scope.username;
             var pass = $scope.password;
 
-             $http( {
-             method: 'POST',
-             url: 'http://'+ IPAddress + '/voucherApp/signIn',
-             headers: { 'Content-Type': 'application/json' },
-             data: {
-             username: user,
-             password: pass
-             }
-             } ).success( function( data ) {
+            $http({
+                method: 'POST',
+                url: 'http://' + IPAddress + '/voucherApp/signIn',
+                headers: {'Content-Type': 'application/json'},
+                data: {
+                    username: user,
+                    password: pass
+                }
+            }).success(function (data) {
 
-                    console.log( data );
+                console.log(data);
 
-                 $cookies.put("privkey", data.privateKey);
-                 $cookies.put("user", user);
-
-
-                 $cookies.put("pubkey", data.publicKey);
-                 var value = $cookies.get("privkey");
-
-                 console.log(value);
-
-                 $location.path('/main');
-
-             });
+                $cookies.put("privkey", data.privateKey);
+                console.log(data.privateKey + "-----1------2---3----")
+                $cookies.put("user", user);
 
 
-           /* $http({
-                method: 'GET',
-                url: 'partials/login.json'
-            }).then(function successCallback(response) {
-
-                $scope.items = response.data;
-
-
-                $cookies.put("privkey", $scope.items.privateKey);
+                $cookies.put("pubkey", data.publicKey);
                 var value = $cookies.get("privkey");
+
                 console.log(value);
 
                 $location.path('/main');
 
-            }, function errorCallback(response) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
-            });*/
-
-
+            });
         }
+
         else {
             alert("Invalid Login");
         }
-    }
+    };
 });
 
 
@@ -91,35 +74,18 @@ app.controller('RegCtrl', function ($scope, $location, $http, $cookies) {
         // use $.param jQuery function to serialize data from JSON
         if ($scope.username && $scope.password && $scope.type) {
 
-            //$http.post('/ServerRequest/PostDataResponse', data, config)
-            //    .success(function (data, status, headers, config) {
-            //      $scope.PostDataResponse = data;
-
-            //alert("Registration successful! Login with your credentials now.")
-            //$location.path('/');
-
-
-            //    })
-            //    .error(function (data, status, header, config) {
-            //      $scope.ResponseDetails = "Data: " + data +
-            //          "<hr />status: " + status +
-            //          "<hr />headers: " + header +
-            //          "<hr />config: " + config;
-            //    });
-
-
-            $http( {
+            $http({
                 method: 'POST',
-                url: 'http://'+ IPAddress + '/voucherApp/createUser',
-                headers: { 'Content-Type': 'application/json' },
+                url: 'http://' + IPAddress + '/voucherApp/createUser',
+                headers: {'Content-Type': 'application/json'},
                 data: {
                     username: $scope.username,
                     password: $scope.password,
                     type: $scope.type
                 }
-            } ).success( function( data ) {
+            }).success(function (data) {
 
-                console.log( data );
+                console.log(data);
 
                 alert("Registration successful! Login with your credentials now.")
                 $location.path('/');
@@ -136,24 +102,58 @@ app.controller('RegCtrl', function ($scope, $location, $http, $cookies) {
 });
 
 
-app.controller('voucherCtrl', function ($scope, $http, $uibModal,  $cookies ) {
+app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cookies, $timeout, blockUI,$window) {
 
 
-    $scope.items = [];
-    $scope.transfer_to = "";
+    $scope.nameOfVoucher = "";
+    $scope.valueOfVoucher = "";
 
+    //$http.get('data/sample.json')
+    //    .success(function (data) {
+    //        $scope.items = data;
+    //        console.log($scope.items);
+    //        console.log("after this");
+    //
+    //
+    //        if ($scope.items.usertype == 1) {
+    //
+    //            $scope.items.usertype = "Donor"
+    //        }
+    //        else if ($scope.items.usertype == 2) {
+    //            $scope.items.usertype = "Customer"
+    //        }
+    //        else if ($scope.items.usertype == 3) {
+    //            $scope.items.usertype = "Company"
+    //        }
+    //
+    //    });
 
-    $scope.nameOfVoucher="";
-    $scope.valueOfVoucher="";
+    $scope.selectedItem = [];
 
+    $scope.selItem = function (myItem) {
+
+        $scope.selectedItem = myItem
+        console.log(myItem);
+    }
 
     $http({
         method: 'GET',
-        url: 'http://'+ IPAddress + '/voucherApp/getOwnedIDs?username='+ $cookies.get("user")
+        url: 'http://' + IPAddress + '/voucherApp/getOwnedIDs?username=' + $cookies.get("user")
     }).then(function successCallback(response) {
-
-        $scope.items = response.data;
+        $scope.items = response.data
         console.log($scope.items)
+        console.log("--------")
+
+        if ($scope.items.usertype == 1) {
+
+            $scope.items.usertype = "Donor"
+        }
+        else if ($scope.items.usertype == 2) {
+            $scope.items.usertype = "Customer"
+        }
+        else if ($scope.items.usertype == 3) {
+            $scope.items.usertype = "Company"
+        }
 
 
     }, function errorCallback(response) {
@@ -163,8 +163,95 @@ app.controller('voucherCtrl', function ($scope, $http, $uibModal,  $cookies ) {
 
     $scope.animationsEnabled = true;
 
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
+    };
+
+    $scope.transferVoucher = function (transferData) {
+
+        if ((Object.keys(transferData).length) == 0) {
+
+
+            alert("Please choose a voucher to transfer")
+
+        }
+
+
+        else {
+
+
+            if ($scope.items.usertype == 'Donor') {
+
+                $scope.open('sm', transferData.txid, transferData.cid)
+                console.log($scope.items.usertype)
+
+            }
+
+            else if ($scope.items.usertype == 'Company') {
+
+                $scope.open('sm', transferData.txid, transferData.cid)
+                console.log($scope.items.usertype)
+            }
+
+            else if ($scope.items.usertype == 'Customer') {
+                console.log($scope.items.usertype)
+                blockUI.start("Transferring voucher...");
+
+                $timeout(function () {
+                    blockUI.message('Adding transaction to Bigchain ...');
+                }, 2000);
+
+
+                $timeout(function () {
+                    blockUI.stop();
+                }, 1000);
+
+                console.log(transferData);
+                console.log("---HAHA--")
+
+                var trans_to = transferData.name;
+                var private_key = $cookies.get("privkey");
+                var trans_from = $scope.items.username;
+                var aid = transferData.txid;
+                var cid = transferData.cid;
+
+                console.log(trans_to);
+                console.log(trans_from);
+                console.log(private_key);
+                console.log(aid);
+
+
+                $http({
+                    method: 'POST',
+                    url: 'http://' + IPAddress + '/voucherApp/transferVoucher',
+                    headers: {'Content-Type': 'application/json'},
+                    data: {
+                        target_username: trans_to,
+                        source_username: trans_from,
+                        private_key: $cookies.get("privkey"),
+                        asset_id: aid,
+                        cid: cid
+                    }
+                }).success(function (data) {
+
+                    console.log(data);
+
+                    $window.location.reload();
+
+                });
+
+
+            }
+
+        }
+
+    };
+
 
     $scope.open = function (size, aid, cid) {
+
+
+        console.log("inside open function")
 
         $scope.aid = aid;
         $scope.cid = cid;
@@ -182,7 +269,7 @@ app.controller('voucherCtrl', function ($scope, $http, $uibModal,  $cookies ) {
             size: size,
             resolve: {
                 items: function () {
-                    return {'data': $scope.items, 'assetid': $scope.aid, 'cid':$scope.cid}
+                    return {'data': $scope.items, 'assetid': $scope.aid, 'cid': $scope.cid}
                 }
             }
 
@@ -210,67 +297,7 @@ app.controller('voucherCtrl', function ($scope, $http, $uibModal,  $cookies ) {
     };
 
 
-    $scope.toggleAnimation = function () {
-        $scope.animationsEnabled = !$scope.animationsEnabled;
-    };
-
 });
-
-
-app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
-    $scope.items = items.data;
-    $scope.aid = items.assetid;
-    $scope.cid = items.cid;
-
-
-    $scope.ok = function () {
-
-        console.log($scope.items);
-        console.log("------")
-        console.log($scope.aid + "in 11111");
-        console.log($scope.cid + "in 11111");
-
-
-        var trans_to = $scope.transfer_to;
-        var private_key = $cookies.get("privkey");
-        var trans_from = $scope.items.username;
-        var aid = $scope.aid;
-        var cid = $scope.cid;
-
-        console.log(trans_to);
-       console.log(trans_from);
-       console.log(private_key);
-       console.log(aid);
-
-
-        $http( {
-         method: 'POST',
-         url: 'http://'+ IPAddress + '/voucherApp/transferVoucher',
-         headers: { 'Content-Type': 'application/json' },
-         data: {
-             target_username:trans_to,
-             source_username: trans_from,
-             private_key:$cookies.get("privkey"),
-             asset_id:aid,
-             cid:cid
-         }
-         } ).success( function( data ) {
-
-             console.log( data );
-
-            $uibModalInstance.close();
-            $window.location.reload();
-
-         });
-
-    };
-
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
-});
-
-
 
 app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
     $scope.items = items.data;
@@ -280,8 +307,8 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
     $scope.ok = function () {
 
         var trans_from = $cookies.get("user");
-        var vname=$scope.nameOfVoucher;
-        var vvalue=$scope.valueOfVoucher;
+        var vname = $scope.nameOfVoucher;
+        var vvalue = $scope.valueOfVoucher;
 
 
         console.log(trans_from);
@@ -289,18 +316,18 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
         console.log(vvalue);
 
 
-        $http( {
+        $http({
             method: 'POST',
-            url: 'http://'+ IPAddress + '/voucherApp/createVoucher',
-            headers: { 'Content-Type': 'application/json' },
+            url: 'http://' + IPAddress + '/voucherApp/createVoucher',
+            headers: {'Content-Type': 'application/json'},
             data: {
                 username: trans_from,
-                voucher_name:vname,
-                value:vvalue
+                voucher_name: vname,
+                value: vvalue
             }
-        } ).success( function( data ) {
+        }).success(function (data) {
 
-            console.log( data );
+            console.log(data);
 
             $uibModalInstance.close();
 
@@ -315,3 +342,69 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
     };
 });
 
+
+app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, items, $cookies, $window, blockUI,$timeout) {
+    $scope.items = items.data;
+    $scope.aid = items.assetid;
+    $scope.cid = items.cid;
+
+
+    $scope.ok = function () {
+
+
+        blockUI.start("Transferring voucher...");
+
+        $timeout(function () {
+            blockUI.message('Adding transaction to Bigchain ...');
+        }, 2000);
+
+
+        $timeout(function () {
+            blockUI.stop();
+        }, 1000);
+
+
+        console.log($scope.items);
+        console.log("------")
+        console.log($scope.aid + "in 11111");
+        console.log($scope.cid + "in 11111");
+
+
+        var trans_to = $scope.transfer_to;
+        var private_key = $cookies.get("privkey");
+        var trans_from = $scope.items.username;
+        var aid = $scope.aid;
+        var cid = $scope.cid;
+
+        console.log(trans_to);
+        console.log(trans_from);
+        console.log(private_key);
+        console.log(aid);
+
+
+        $http({
+            method: 'POST',
+            url: 'http://' + IPAddress + '/voucherApp/transferVoucher',
+            headers: {'Content-Type': 'application/json'},
+            data: {
+                target_username: trans_to,
+                source_username: trans_from,
+                private_key: $cookies.get("privkey"),
+                asset_id: aid,
+                cid: cid
+            }
+        }).success(function (data) {
+
+            console.log(data);
+
+            $uibModalInstance.close();
+            $window.location.reload();
+
+        });
+
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
