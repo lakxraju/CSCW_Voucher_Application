@@ -59,6 +59,13 @@ if not r.db(DatabaseNames.CUSTOM_DB.value).table_list().contains(TableNames.USER
 
 @app.route('/voucherApp/createUser', methods=['POST'])
 def createUser():
+    """
+    :arg username: Desired Username of the user to be created
+    :arg password: Intended password
+    :arg type: Type of the user: This can be one of the following strings: 1.CUSTOMER 2. DONOR 3. COMPANY
+    :return: status of the operation and the keypairs when the user creation is success! If there is some error, it sends the errorMessage as well.
+
+    """
     # Specifying Mandatory Arguments
     parser = reqparse.RequestParser()
     parser.add_argument(UserAttributes.USERNAME.value, required=True, type=str)
@@ -80,6 +87,12 @@ def createUser():
 
 @app.route('/voucherApp/signIn', methods=['POST'])
 def signIn():
+    """
+    :arg username: Username of the user to log in
+    :arg password: password of the username provided
+    :return: Returns the error message if the username or password is incorrect. Else, it returns public, private keypairs and the type of the user.
+
+    """
     # Specifying Mandatory Arguments
     parser = reqparse.RequestParser()
     parser.add_argument(UserAttributes.USERNAME.value, required=True, type=str)
@@ -101,7 +114,14 @@ def signIn():
 
 @app.route('/voucherApp/createVoucher', methods=['POST'])
 def createVoucher():
-    # Specifying Mandatory Arguments
+    """
+    :arg username: Username of the current user
+    :arg voucher_name: name of the voucher to be created. This name should be same as an existing company name
+    :arg value: value of the voucher. For now, it is just a string and doesn't play a key role
+    :return: Returns the error message if the username or password is incorrect. Else, it returns public, private keypairs and the type of the user.
+
+    """
+    #Specifying Mandatory Arguments
     parser = reqparse.RequestParser()
     parser.add_argument(UserAttributes.USERNAME.value, required=True, type=str)
     parser.add_argument('value', required=True, type=str)
@@ -154,23 +174,39 @@ def createVoucher():
 
 @app.route('/Client/', methods=['GET', 'POST'])
 def testConnection():
+    """
+    :return: Returns the index page of the voucher application
+
+    """
     return render_template("index.html")
 
 
 @app.route('/Client/<path:path>', methods=['GET'])
 def sendStaticFile(path):
+    """
+    :return: Returns the static javascript/CSS files as requested
+
+    """
     print("/Client/" + path)
     return send_from_directory(os.path.dirname(os.getcwd()) + "/Client/", path)
 
 
 @app.route('/templates/<path:path>', methods=['GET'])
 def sendStaticFile1(path):
+    """
+    :return: Returns the static javascript/CSS files as requested
+
+    """
     print("/Client/" + path)
     return send_from_directory(os.path.dirname(os.getcwd()) + "/Client/templates/", path)
 
 
 @app.route('/partials/<path:path>', methods=['GET'])
 def sendStaticFile2(path):
+    """
+    :return: Returns the static javascript/CSS files as requested
+
+    """
     print("/Client/" + path)
     return send_from_directory(os.path.dirname(os.getcwd()) + "/Client/partials/", path)
 
@@ -256,35 +292,59 @@ def transferVoucher():
             return jsonify(status="error", errorMessage="Transaction is not valid")
 
 
-# Following are the utility methods
 
-def checkIfTheUserExists(userName):
-    return_data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).get(userName).count().default(0).run(
-        conn)
-    if (return_data > 0):
-        return True
+@app.route('/voucherApp/transferMultipleVouchers', methods=['POST'])
+def transferMultipleVouchers():
+    source_username = request.get_json(force=False)[UserAttributes.SOURCE_USERNAME.value]
+    target_username = request.get_json(force=False)[UserAttributes.TARGET_USERNAME.value]
+    sourceuser_priv_key = request.get_json(force=False)[UserAttributes.PRIVATE_KEY.value]
+    cids = request.form.getlist("cids")
+    asset_ids = request.form.getlist("asset_ids")
+    non_transferred_assets = []
+
+    for idx, value in enumerate(asset_ids):
+        current_cid = cids[idx]
+        current_asset = b.get_transaction(value)
+        if (not checkIfTheUserExists(target_username)):
+            return jsonify(status="error", errorMessage="Target User doesn't exist!")
+        elif (not checkIfTheUserExists(source_username)):
+            return jsonify(status="error", errorMessage="Source User doesn't exist!")
+        elif (not isTransferValid(source_username, target_username, current_asset)):
+            temp = {'asset_id': value, 'message': "Transaction not valid between intended users!"}
+            non_transferred_assets.append(temp)
+        else:
+            target_user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, target_username)[
+                UserAttributes.PUBLIC_KEY.value]
+            source_user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, source_username)[
+                UserAttributes.PUBLIC_KEY.value]
+            print(sourceuser_priv_key)
+            tx = {}
+            tx["txid"] = value
+            tx["cid"] = current_cid
+            # asset = b.get_transaction(asset_id)
+
+            newPayload = current_asset["transaction"]["data"]["payload"]
+            newPayload["from"] = source_username
+            newPayload["to"] = target_username
+            tx_transfer = b.create_transaction(source_user_pub_key, target_user_pub_key, tx, Operations.TRANSFER.value,
+                                               payload=newPayload)
+            tx_transfer_signed = b.sign_transaction(tx_transfer, sourceuser_priv_key)
+
+            if b.is_valid_transaction(tx_transfer_signed):
+                b.write_transaction(tx_transfer_signed)
+            else:
+                print("Error While transferring an asset: Not a valid Transaction!")
+                print("Source Username:" + source_username + "   --Source Pub Key:" + source_user_pub_key)
+                print("Target Username:" + target_username + "   --Target Pub Key:" + target_user_pub_key)
+                temp = {'asset_id': value, 'message': "Error While transferring an asset: Not a valid Transaction!"}
+                non_transferred_assets.append(temp)
+
+    time.sleep(10)
+    if(len(non_transferred_assets)>0):
+        return jsonify(status="error", details = non_transferred_assets)
     else:
-        return False
+        return jsonify(status="success")
 
-
-def constructUserTuple(username, password, type, public_key, private_key):
-    data = {}
-    data[UserAttributes.USERNAME.value] = username
-    data[UserAttributes.PASSWORD.value] = password
-    data[UserAttributes.TYPE.value] = type
-    data[UserAttributes.PUBLIC_KEY.value] = public_key
-    data[UserAttributes.PRIVATE_KEY.value] = private_key
-    return data
-
-
-def getUserType(username):
-    userTuple = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, username)
-    if (userTuple[UserAttributes.TYPE.value] == "1"):
-        return UserType.DONOR.value
-    elif (userTuple[UserAttributes.TYPE.value] == "2"):
-        return UserType.CONSUMER.value
-    elif (userTuple[UserAttributes.TYPE.value] == "3"):
-        return UserType.COMPANY.value
 
 @app.route('/voucherApp/companys', methods=['GET'])
 def getCompanyList():
@@ -331,6 +391,36 @@ def get_owned_assets():
 
                 allPayloads.append(temp)
     return jsonify(history = allPayloads)
+
+# Following are the utility methods
+
+def checkIfTheUserExists(userName):
+    return_data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).get(userName).count().default(0).run(
+        conn)
+    if (return_data > 0):
+        return True
+    else:
+        return False
+
+
+def constructUserTuple(username, password, type, public_key, private_key):
+    data = {}
+    data[UserAttributes.USERNAME.value] = username
+    data[UserAttributes.PASSWORD.value] = password
+    data[UserAttributes.TYPE.value] = type
+    data[UserAttributes.PUBLIC_KEY.value] = public_key
+    data[UserAttributes.PRIVATE_KEY.value] = private_key
+    return data
+
+
+def getUserType(username):
+    userTuple = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, username)
+    if (userTuple[UserAttributes.TYPE.value] == "1"):
+        return UserType.DONOR.value
+    elif (userTuple[UserAttributes.TYPE.value] == "2"):
+        return UserType.CONSUMER.value
+    elif (userTuple[UserAttributes.TYPE.value] == "3"):
+        return UserType.COMPANY.value
 
 def isTransferValid(username1, username2, voucher):
     userType1 = getUserType(username1)
