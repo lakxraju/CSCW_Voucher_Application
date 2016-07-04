@@ -171,6 +171,61 @@ def createVoucher():
 
         return json.dumps(userData)
 
+@app.route('/voucherApp/createAndTransferVoucher', methods=['POST'])
+def createAndTransferVoucher():
+    """
+    :arg source_username: Username of the current user
+    :arg voucher_name: name of the voucher to be created. This name should be same as an existing company name
+    :arg value: value of the voucher. For now, it is just a string and doesn't play a key role
+    :return: Returns the error message if the source_username or password is incorrect. Else, it returns public, private keypairs and the type of the user.
+
+    """
+    #Specifying Mandatory Arguments
+    parser = reqparse.RequestParser()
+    parser.add_argument(UserAttributes.SOURCE_USERNAME.value, required=True, type=str)
+    parser.add_argument('value', required=True, type=str)
+    parser.add_argument('voucher_name', required=True, type=str)
+
+    voucherName = request.get_json(force=False)['voucher_name']
+    source_username = request.get_json(force=False)[UserAttributes.SOURCE_USERNAME.value]
+    value = request.get_json(force=False)['value']
+    data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).filter({'type': UserType.CONSUMER.value}).pluck('source_username').run(conn)
+    customerList = list(data)
+    non_transferred_assets = []
+
+    if (not checkIfTheUserExists(source_username)):
+        return jsonify(status="error", errorMessage="User doesn't exist!")
+    elif (not UserType.DONOR.value == getUserType(source_username)):
+        return jsonify(status="error", errorMessage="Invalid Operation for the current User!")
+    if (not checkIfTheUserExists(voucherName)):
+        return jsonify(status="error", errorMessage="Company doesn't exist! Please check the name of the voucher!")
+    elif (not UserType.COMPANY.value == getUserType(voucherName)):
+        return jsonify(status="error", errorMessage="Voucher name is not valid! Hint: Voucher name should match a company")
+
+    for idx,currentCustomer in enumerate(customerList):
+        voucherPayload = {}
+        voucherPayload["name"] = voucherName # its also the company name
+        voucherPayload["value"] = value
+        voucherPayload["from"] = source_username
+        voucherPayload["to"] = currentCustomer
+        voucherPayload["donor_name"] = source_username
+        voucherPayload["combo"] = source_username
+        user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, currentCustomer)[
+            UserAttributes.PUBLIC_KEY.value]
+        tx = b.create_transaction(b.me, user_pub_key, None, Operations.CREATE.value, payload=voucherPayload)
+        tx_signed = b.sign_transaction(tx, b.me_private)
+        if b.is_valid_transaction(tx_signed):
+            b.write_transaction(tx_signed)
+        else:
+            temp = {"status":"error", "errorMessage":"Transaction not valid!", "toUser":currentCustomer}
+            non_transferred_assets.append(temp)
+
+    time.sleep(10)
+    if(len(non_transferred_assets) > 0):
+        return jsonify(status = "error", errorMessage = "Not transferred to all. Error Occurred", non_transferred_companies=non_transferred_assets)
+    else:
+        return jsonify(status = "success", message = "Transferred to all")
+
 
 @app.route('/Client/', methods=['GET', 'POST'])
 def testConnection():
@@ -386,6 +441,12 @@ def get_owned_assets():
                     temp['type'] = 'CREATE'
                 elif temp['from'] == public_key:
                     temp['type'] = 'SENT'
+                    if 'combo' in temp:
+                        temp1 = txn["transaction"]["data"]["payload"]
+                        temp1['txid'] = txn['id']
+                        temp1['timestamp'] = block_timestamp
+                        temp1['type'] = "CREATE"
+                        allPayloads.append(temp1)
                 elif temp['to'] == public_key:
                     temp['type'] = 'RECEIVED'
 
