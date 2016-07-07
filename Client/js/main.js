@@ -9,7 +9,7 @@ var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute", "ngCook
  * Configure the Routes
  */
 //var IPAddress = "10.144.103.72:5000"
-var IPAddress = "10.144.103.72:5000"
+var IPAddress = ""
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
 
@@ -32,7 +32,7 @@ app.controller('LoginCtrl', function ($scope, $http, $location, $cookies) {
 
             $http({
                 method: 'POST',
-                url: 'http://' + IPAddress + '/voucherApp/signIn',
+                url: IPAddress + '/voucherApp/signIn',
                 headers: {'Content-Type': 'application/json'},
                 data: {
                     username: user,
@@ -77,7 +77,7 @@ app.controller('RegCtrl', function ($scope, $location, $http, $cookies) {
 
             $http({
                 method: 'POST',
-                url: 'http://' + IPAddress + '/voucherApp/createUser',
+                url:   IPAddress + '/voucherApp/createUser',
                 headers: {'Content-Type': 'application/json'},
                 data: {
                     username: $scope.username,
@@ -139,7 +139,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
 
     $http({
         method: 'GET',
-        url: 'http://' + IPAddress + '/voucherApp/getOwnedIDs?username=' + $cookies.get("user")
+        url:   IPAddress + '/voucherApp/getOwnedIDs?username=' + $cookies.get("user")
     }).then(function successCallback(response) {
         $scope.items = response.data
         console.log($scope.items)
@@ -224,7 +224,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
 
                 $http({
                     method: 'POST',
-                    url: 'http://' + IPAddress + '/voucherApp/transferVoucher',
+                    url:  IPAddress + '/voucherApp/transferVoucher',
                     headers: {'Content-Type': 'application/json'},
                     data: {
                         target_username: trans_to,
@@ -318,7 +318,7 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
 
         $http({
             method: 'POST',
-            url: 'http://' + IPAddress + '/voucherApp/createVoucher',
+            url:   IPAddress + '/voucherApp/createVoucher',
             headers: {'Content-Type': 'application/json'},
             data: {
                 username: trans_from,
@@ -386,7 +386,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
 
         $http({
             method: 'POST',
-            url: 'http://' + IPAddress + '/voucherApp/transferVoucher',
+            url:   IPAddress + '/voucherApp/transferVoucher',
             headers: {'Content-Type': 'application/json'},
             data: {
                 target_username: trans_to,
