@@ -9,7 +9,7 @@ var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute", "ngCook
  * Configure the Routes
  */
 //var IPAddress = "10.144.103.72:5000"
-var IPAddress = "10.144.103.72:5000"
+var IPAddress = "192.168.0.29:5000"
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
 
@@ -161,6 +161,24 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
         // called asynchronously if an error occurs
         // or server returns response with an error status.
     });
+
+
+
+     $http({
+        method: 'GET',
+        url: 'http://' + IPAddress + '/voucherApp/getHistory?username=' + $cookies.get("user")
+    }).then(function successCallback(response) {
+        $scope.history = response.data
+
+         console.log($scope.history);
+
+    }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+    });
+
+
+
 
     $scope.animationsEnabled = true;
 
