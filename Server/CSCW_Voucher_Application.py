@@ -9,6 +9,7 @@ import rethinkdb as r
 from flask.ext.cors import CORS
 import time
 import os
+import datetime
 from enum import Enum
 
 from werkzeug.debug import DebuggedApplication
@@ -122,6 +123,7 @@ def createVoucher():
 
     """
     #Specifying Mandatory Arguments
+    print('in create voucher')
     parser = reqparse.RequestParser()
     parser.add_argument(UserAttributes.USERNAME.value, required=True, type=str)
     parser.add_argument('value', required=True, type=str)
@@ -140,6 +142,7 @@ def createVoucher():
     elif (not UserType.COMPANY.value == getUserType(voucherName)):
         return jsonify(status="error", errorMessage="Voucher name is not valid! Hint: Voucher name should match a company")
     else:
+        print('creating voucher payload')
         voucherPayload = {}
         voucherPayload["name"] = voucherName # its also the company name
         voucherPayload["value"] = value
@@ -153,6 +156,7 @@ def createVoucher():
         userData = {}
 
         if b.is_valid_transaction(tx_signed):
+            print('writing transaction')
             b.write_transaction(tx_signed)
             # b.validate_transaction(tx_signed)
             time.sleep(10)
@@ -167,8 +171,10 @@ def createVoucher():
             userData["username"] = username
             userData["usertype"] = getUserType(username)
         else:
+            print("Transaction no valid!")
             return jsonify(status="error", errorMessage="Transaction not valid!")
-
+        print('In Create Voucher: Voucher created: Details Below')
+        print(userData)
         return json.dumps(userData)
 
 @app.route('/voucherApp/createAndTransferVoucher', methods=['POST'])
@@ -430,11 +436,14 @@ def get_owned_assets():
     allPayloads = []
     for temprow in tempresponse:
         txns = temprow["block"]["transactions"]
-        block_timestamp = temprow["block"]["timestamp"]
+        temp_timestamp = float(temprow["block"]["timestamp"])
+        block_timestamp = datetime.datetime.fromtimestamp(temp_timestamp).strftime('%d %b %Y %H:%M:%S')
+
         for txn in txns:
             temp = txn["transaction"]["data"]["payload"]
             temp['txid'] = txn['id']
-            temp['timestamp'] = block_timestamp
+            temp['datetime'] = block_timestamp
+            temp['timestamp'] = temp_timestamp
             if 'from' in temp and 'to' in temp and (temp['from'] == public_key or temp['to'] == public_key):
 
                 if temp['from'] == public_key and temp['to'] == public_key:
@@ -444,7 +453,8 @@ def get_owned_assets():
                     if 'combo' in temp:
                         temp1 = txn["transaction"]["data"]["payload"]
                         temp1['txid'] = txn['id']
-                        temp1['timestamp'] = block_timestamp
+                        temp1['datetime'] = block_timestamp
+                        temp1['timestamp'] = temp_timestamp
                         temp1['type'] = "CREATE"
                         allPayloads.append(temp1)
                 elif temp['to'] == public_key:

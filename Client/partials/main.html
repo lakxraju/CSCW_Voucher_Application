@@ -15,7 +15,7 @@
 <br/>
 <br/>
 
-    <table st-table="items.txnDetails" class="table" style="background: white">
+    <table st-table="items" class="table" style="background: white">
         <thead>
         <tr>
             <th style="background: #2d6ca2"></th>
@@ -47,6 +47,36 @@
     <button type="button" style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success" ng-click="transferVoucher(selectedItem)"  ng-show="items.usertype!='Donor'">
     <h4>Redeem</h4>
 </button>
+
+<br/> <br/> <br/>
+<br/> <br/> <br/>
+
+
+      <table st-table="historyList" class="table" style="background: #efede7">
+        <thead>
+        <th colspan="6" style="background-color:#bebcb6"> <h2>History of Transactions</h2> </th>
+        <tr>
+            <th st-sort="name">Name</th>
+            <th st-sort="value">Value</th>
+            <th st-sort="type">Type</th>
+              <th st-sort="from">Sender</th>
+              <th st-sort="to">Receiver</th>
+              <th st-sort="datetime">TimeStamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="h in historyList.history">
+            <td>{{h.name}}</td>
+            <td>{{h.value}}</td>
+            <td>{{h.type}}</td>
+             <td>{{h.from}}</td>
+            <td>{{h.to}}</td>
+            <td>{{h.datetime }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
 
 </div>
 <!-- /.container -->
