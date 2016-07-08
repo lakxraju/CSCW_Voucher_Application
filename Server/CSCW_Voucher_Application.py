@@ -271,6 +271,17 @@ def sendStaticFile2(path):
     print("/Client/" + path)
     return send_from_directory(os.path.dirname(os.getcwd()) + "/Client/partials/", path)
 
+@app.route('/voucherApp/getBlockContents', methods=['GET'])
+def getBlockDetails():
+    # Specifying Mandatory Arguments
+    parser = reqparse.RequestParser()
+    parser.add_argument("blockNumber", required=True, type=int)
+    blockNumber = request.args.get("blockNumber")
+
+    if(r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).count().run(conn) > 0):
+        return jsonify(blockContents = r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).run(conn))
+    else:
+        return jsonify(errorMessage = "Queried Block Number doesn't exist!")
 
 @app.route('/voucherApp/getOwnedIDs', methods=['GET'])
 def getOwnedIDs():
@@ -435,6 +446,7 @@ def get_owned_assets():
    # response = list(tempresponse)
     allPayloads = []
     for temprow in tempresponse:
+        block_number = temprow["block_number"]
         txns = temprow["block"]["transactions"]
         temp_timestamp = float(temprow["block"]["timestamp"])
         block_timestamp = datetime.datetime.fromtimestamp(temp_timestamp).strftime('%d %b %Y %H:%M:%S')
@@ -444,6 +456,7 @@ def get_owned_assets():
             temp['txid'] = txn['id']
             temp['datetime'] = block_timestamp
             temp['timestamp'] = temp_timestamp
+            temp['blockNumber'] = block_number
             if 'from' in temp and 'to' in temp and (temp['from'] == public_key or temp['to'] == public_key):
 
                 if temp['from'] == public_key and temp['to'] == public_key:
@@ -456,6 +469,7 @@ def get_owned_assets():
                         temp1['datetime'] = block_timestamp
                         temp1['timestamp'] = temp_timestamp
                         temp1['type'] = "CREATE"
+                        temp1['blockNumber'] = block_number
                         allPayloads.append(temp1)
                 elif temp['to'] == public_key:
                     temp['type'] = 'RECEIVED'
