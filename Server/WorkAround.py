@@ -15,8 +15,20 @@ def query_reql_response(response, query):
     return None
 
 
+def process_response(response, query):
+    result = list(response)
 
-def get_owned_assets(bigchain, vk, query=None, table='bigchain'):
+    if result and len(result):
+        content = result[0]["transaction"]["data"]["payload"]["content"]
+        if content:
+            if (not query) or (query and query in content):
+                return result
+    return None
+
+
+
+
+def get_owned_assets_backup(bigchain, vk, query=None, table='bigchain'):
 
     assets = []
     asset_ids = bigchain.get_owned_ids(vk)
@@ -44,8 +56,38 @@ def get_owned_assets(bigchain, vk, query=None, table='bigchain'):
 
     return assets
 
+
+def get_owned_assets(bigchain, vk, query=None, table='bigchain'):
+
+    assets = []
+    tempresponse = r.db("bigchain").table(table).run(bigchain.conn)
+    public_key ="cscw_donor"
+   # response = list(tempresponse)
+    allPayloads = []
+    for temprow in tempresponse:
+        txns = temprow["block"]["transactions"]
+        for txn in txns:
+            temp = txn["transaction"]["data"]["payload"]
+            temp['txid'] = txn['id']
+            if 'from' in temp and 'to' in temp and (temp['from'] == public_key or temp['to'] == public_key):
+
+                if temp['from'] == public_key and temp['to'] == public_key:
+                    temp['type'] = 'CREATE'
+                elif temp['from'] == public_key:
+                    temp['type'] = 'SENT'
+                elif temp['to'] == public_key:
+                    temp['type'] = 'RECEIVED'
+
+                allPayloads.append(temp)
+    print("Final Output:")
+    print(allPayloads)
+
+
+    assets = []
+    return assets
+
 b = Bigchain()
-assets = get_owned_assets(b,vk="8mKrjZHtEuvEZmBQARFJyTHtZ9HdBUjARxtUtQ7YHiFN")
+assets = get_owned_assets(b,vk="DgnY3aPBQ1ptw65C6GNWmxyPqFBSHUBRH61Wxy6KvTqz")
 print(assets)
 
 
@@ -82,7 +124,8 @@ data["private_key"]="Hasdbnasdnas2343534dfsdfnsdf2342adsd324dr32"
 json_data = json.dumps(data)
 print(json_data)
 r.db("bigchain").table("user_table").insert(data).run(conn)
-'''
+
+
 return_data = r.db("bigchain").table("user_table").get("lrajendran").count().run(conn)
 print(return_data)
 print(return_data>0)
@@ -91,4 +134,4 @@ if(return_data>0):
 #print(return_data["password"])
 #print(return_data["private_key"])
 
-
+'''
