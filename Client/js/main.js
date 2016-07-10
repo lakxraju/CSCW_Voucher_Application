@@ -77,7 +77,7 @@ app.controller('RegCtrl', function ($scope, $location, $http, $cookies) {
 
             $http({
                 method: 'POST',
-                url:   IPAddress + '/voucherApp/createUser',
+                url: IPAddress + '/voucherApp/createUser',
                 headers: {'Content-Type': 'application/json'},
                 data: {
                     username: $scope.username,
@@ -103,7 +103,7 @@ app.controller('RegCtrl', function ($scope, $location, $http, $cookies) {
 });
 
 
-app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cookies, $timeout, blockUI,$window) {
+app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cookies, $timeout, blockUI, $window) {
 
 
     $scope.nameOfVoucher = "";
@@ -139,7 +139,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
 
     $http({
         method: 'GET',
-        url:   IPAddress + '/voucherApp/getOwnedIDs?username=' + $cookies.get("user")
+        url: IPAddress + '/voucherApp/getOwnedIDs?username=' + $cookies.get("user")
     }).then(function successCallback(response) {
         $scope.items = response.data
         console.log($scope.items)
@@ -163,15 +163,14 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
     });
 
 
-
-     $http({
+    $http({
         method: 'GET',
         url: IPAddress + '/voucherApp/getHistory?username=' + $cookies.get("user")
     }).then(function successCallback(response) {
-         
+
         $scope.historyList = response.data
 
-         console.log($scope.historyList);
+        console.log($scope.historyList);
 
     }, function errorCallback(response) {
         // called asynchronously if an error occurs
@@ -179,6 +178,17 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
     });
 
 
+    $http({
+        method: 'GET',
+        url: IPAddress + '/voucherApp/customers'
+    }).then(function successCallback(response) {
+
+        $scope.customerList = response.data
+
+    }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+    });
 
 
     $scope.animationsEnabled = true;
@@ -202,18 +212,13 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
 
             if ($scope.items.usertype == 'Donor') {
 
-                $scope.open('sm', transferData.txid, transferData.cid)
+                $scope.open('sm', transferData.txid, transferData.cid, transferData.name)
                 console.log($scope.items.usertype)
 
             }
 
-            else if ($scope.items.usertype == 'Company') {
+            else if ($scope.items.usertype == 'Customer' || 'Company') {
 
-                $scope.open('sm', transferData.txid, transferData.cid)
-                console.log($scope.items.usertype)
-            }
-
-            else if ($scope.items.usertype == 'Customer') {
                 console.log($scope.items.usertype)
                 blockUI.start("Transferring voucher...");
 
@@ -226,10 +231,12 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
                     blockUI.stop();
                 }, 1000);
 
-                console.log(transferData);
-                console.log("---HAHA--")
-
-                var trans_to = transferData.name;
+                if ($scope.items.usertype == 'Company') {
+                    var trans_to = transferData.donor;
+                }
+                else if ($scope.items.usertype == 'Customer') {
+                    var trans_to = transferData.name;
+                }
                 var private_key = $cookies.get("privkey");
                 var trans_from = $scope.items.username;
                 var aid = transferData.txid;
@@ -243,7 +250,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
 
                 $http({
                     method: 'POST',
-                    url:  IPAddress + '/voucherApp/transferVoucher',
+                    url: IPAddress + '/voucherApp/transferVoucher',
                     headers: {'Content-Type': 'application/json'},
                     data: {
                         target_username: trans_to,
@@ -267,7 +274,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
     };
 
 
-    $scope.open = function (size, aid, cid) {
+    $scope.open = function (size, aid, cid, voucherName) {
 
 
         console.log("inside open function")
@@ -288,7 +295,13 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             size: size,
             resolve: {
                 items: function () {
-                    return {'data': $scope.items, 'assetid': $scope.aid, 'cid': $scope.cid}
+                    return {
+                        'data': $scope.items,
+                        'assetid': $scope.aid,
+                        'cid': $scope.cid,
+                        'cList': $scope.customerList,
+                        'vname': voucherName
+                    }
                 }
             }
 
@@ -329,7 +342,6 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
         var vname = $scope.nameOfVoucher;
         var vvalue = $scope.valueOfVoucher;
 
-
         console.log(trans_from);
         console.log(vname);
         console.log(vvalue);
@@ -337,7 +349,7 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
 
         $http({
             method: 'POST',
-            url:   IPAddress + '/voucherApp/createVoucher',
+            url: IPAddress + '/voucherApp/createVoucher',
             headers: {'Content-Type': 'application/json'},
             data: {
                 username: trans_from,
@@ -349,7 +361,7 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
             console.log(data);
 
             $uibModalInstance.close();
-            if(data.status == "error")
+            if (data.status == "error")
                 alert(data.errorMessage);
             else
                 $window.location.reload();
@@ -364,11 +376,14 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
 });
 
 
-app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, items, $cookies, $window, blockUI,$timeout) {
+app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, items, $cookies, $window, blockUI, $timeout) {
     $scope.items = items.data;
     $scope.aid = items.assetid;
     $scope.cid = items.cid;
+    $scope.customerList = items.cList;
 
+    $scope.selCust = null;
+    $scope.vname = items.vname;
 
     $scope.ok = function () {
 
@@ -386,12 +401,12 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
 
 
         console.log($scope.items);
-        console.log("------")
-        console.log($scope.aid + "in 11111");
-        console.log($scope.cid + "in 11111");
+        console.log($scope.aid);
+        console.log($scope.cid);
+        console.log($scope.selCust);
 
 
-        var trans_to = $scope.transfer_to;
+        var trans_to = $scope.selCust.username;
         var private_key = $cookies.get("privkey");
         var trans_from = $scope.items.username;
         var aid = $scope.aid;
@@ -405,7 +420,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
 
         $http({
             method: 'POST',
-            url:   IPAddress + '/voucherApp/transferVoucher',
+            url: IPAddress + '/voucherApp/transferVoucher',
             headers: {'Content-Type': 'application/json'},
             data: {
                 target_username: trans_to,

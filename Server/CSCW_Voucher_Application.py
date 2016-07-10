@@ -301,6 +301,7 @@ def getOwnedIDs():
             print(txn)
             k["name"] = txn["transaction"]["data"]["payload"]["name"]
             k["value"] = txn["transaction"]["data"]["payload"]["value"]
+            k["donor"] = txn["transaction"]["data"]["payload"]["donor_name"]
 
         userData = {}
         userData["txnDetails"] = ownedIDs

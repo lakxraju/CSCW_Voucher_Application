@@ -178,3 +178,18 @@ td{
     width: 100%;
     height: 2em;
 }
+
+/*.scrollwidth {*/
+    /*width: 60px;*/
+    /*height: 40px;*/
+/*}*/
+
+
+label{
+    margin-bottom: 6px;
+    margin-top: 6px;
+}
+
+.form-group{
+    margin-bottom: 0px;
+}
