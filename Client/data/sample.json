@@ -1,0 +1,46 @@
+/**
+ * @author SharathChandra
+   created on  01/07/2016
+ */
+{
+    "txnDetails": [
+      {
+        "cid": 0,
+        "name": "Starbucks",
+        "value": "1 free Coffee",
+        "txid": "eb2affd53c868e3b7a8cdeaccce075d3fc29b1fa8fc56d374b9fefebc5d633dd"
+      },
+      {
+        "cid": 1,
+        "name": "Coffee Day",
+        "value": "2 free Coffees",
+        "txid": "60d95c401e4ea31bd532f344d632fdae375aa68941563bb36b67c1373f87a7ba"
+      },
+      {
+        "cid": 2,
+        "name": "Lidl",
+        "value": "3 free Coffees",
+        "txid": "34234234fsfe4ea31bd532f344d632fdae375aa68941563bb36b67dfhs84r453235"
+      },
+      {
+        "cid": 3,
+        "name": "Netto",
+        "value": "4 free Coffees",
+        "txid": "43634gsdgdg868e3b7a8cdeaccce075d3fc29b1fa8fc56d374b9fefebc5d633dd"
+      },
+      {
+        "cid": 4,
+        "name": "Aldi",
+        "value": "5 free Coffees",
+        "txid": "0099fweewaw43468e3b7a8cdeaccce075d3fc29b1fa8fc56d374b9fefebc5d633dd"
+      },
+      {
+        "cid": 6,
+        "name": "Fraunhofer",
+        "value": "6 free Coffees",
+        "txid": "8daw8e3ddsa22affd53c868e3b7a8cdeaccce075d3fc29b1fa8fc56d374b9fefebc5d633dd"
+      }
+    ],
+    "username": "SharathChandra",
+    "usertype": "1"
+}

@@ -1,58 +1,95 @@
+<!--
+* @author SharathChandra
+* created on  01/07/2016
+-->
+
 <div class="container">
 
     <div class="row">
-
         <div class="col-lg-12">
-            <h1 class="page-header">My Vouchers {{ "( " + items.usertype + " )"}}<br><br><br>
-            </h1>
+            <h1 class="page-header"><strong>{{items.username +"'s Vouchers"}}</strong></h1>
+            <h4>{{ "Type : " + items.usertype}}<br/>
+            </h4>
         </div>
-
     </div>
+<br/>
+<br/>
 
-    <div class="row">
+    <table st-table="items" class="table" style="background: white">
+        <thead>
+        <tr>
+            <th style="background: #2d6ca2"></th>
+            <th>Name</th>
+            <th>Value</th>
+            <th>AssetID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="item in items.txnDetails">
+            <td style="background:#9dcfff"><input type="radio" id="radTable" name="item.txid" st-select-row="item" ng-click="selItem(item)"></td>
+            <td>{{item.name}}</td>
+            <td>{{item.value}}</td>
+            <td>{{item.txid}}</td>
+        </tr>
+        </tbody>
+    </table>
 
-        <div class="col-sm-3" ng-repeat="voucher in items.txnDetails">
-            <div class="panel panel-default text-center">
-                <div class="panel-heading" style="font-size: 20px">
-                    <strong>{{voucher.name}}</strong>
-                </div>
-                <div class="panel-body">
-                    <h3 class="panel-title price">€9
-                        <span class="price-cents">99</span>
-                    </h3>
-                </div>
-                <ul class="list-group">
-                    <li class="list-group-item"> {{voucher.value}}</li>
-                    <br>
-                    <li>
-                        <button type="button" class="btn btn-success" ng-click="open('sm',voucher.txid,voucher.cid)"  ng-show="items.usertype!='1'" ng-model="voucher.txid">
-                            Redeem
-                        </button>
-                        <button type="button" class="btn btn-primary" ng-click="open('sm',voucher.txid,voucher.cid)"  ng-show="items.usertype=='1'" ng-model="voucher.txid">
-                            Transfer
-                        </button>
-                    </li>
-                    <br>
-                </ul>
-            </div>
-        </div>
-        <button type="button" class="btn btn-primary" ng-click="newVoucher('lg')" ng-show="items.usertype=='1'">
-            Add a new voucher
-        </button>
-    </div>
+    <br/>
+
+    <button type="button" style="height: 4em; width:15em;" class="btn btn-primary" ng-click="newVoucher('lg')" ng-show="items.usertype=='Donor'">
+    <h4>Add a new voucher</h4>
+    </button>
+
+    <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-success" ng-click="transferVoucher(selectedItem)"  ng-show="items.usertype=='Donor'">
+        <h4>Transfer</h4>
+    </button>
+
+    <button type="button" style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success" ng-click="transferVoucher(selectedItem)"  ng-show="items.usertype!='Donor'">
+    <h4>Redeem</h4>
+</button>
+
+<br/> <br/> <br/>
+<br/> <br/> <br/>
+
+
+      <table st-table="historyList" class="table" style="background: #efede7">
+        <thead>
+        <th colspan="6" style="background-color:#bebcb6"> <h2>History of Transactions</h2> </th>
+        <tr>
+            <th st-sort="name">Name</th>
+            <th st-sort="value">Value</th>
+            <th st-sort="type">Type</th>
+              <th st-sort="from">Sender</th>
+              <th st-sort="to">Receiver</th>
+              <th st-sort="datetime">TimeStamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="h in historyList.history">
+            <td>{{h.name}}</td>
+            <td>{{h.value}}</td>
+            <td>{{h.type}}</td>
+             <td>{{h.from}}</td>
+            <td>{{h.to}}</td>
+            <td>{{h.datetime }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+
 
 </div>
 <!-- /.container -->
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
-        <h3 class="modal-title">Asset ID : <strong>{{aid}}</strong></h3>
+        <h2 class="modal-title"><strong>{{vname}}</strong></h2>
     </div>
     <div class="modal-body">
-
-        <div>{{voucher.name}}</div>
         <div class="form-group">
-            <label>Transfer To:</label>
-            <input type="text" ng-model="transfer_to" class="form-control">
+            <label><h4> <strong>Transfer To : </strong></h4></label> &nbsp;
+              <select ng-model="selCust" ng-options="cust as cust.username for cust in customerList">
+                  <option value="">---Please select---</option>
+              </select>
         </div>
 
     </div>
@@ -73,10 +110,10 @@
 
         <div class="form-group">
 
-            <label>Name:</label>
+            <label>Company</label>:</label>
             <input type="text" ng-model="nameOfVoucher" class="form-control">
             <br>
-            <label>Value:</label>
+            <label>Description</label>:</label>
             <input type="text" ng-model="valueOfVoucher" class="form-control">
 
         </div>
@@ -86,7 +123,6 @@
 
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-        <div ng-show="loader.loading">Loading...</div>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
