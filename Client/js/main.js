@@ -3,12 +3,12 @@
  created on  01/07/2016
  */
 
-var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute", "ngCookies", "blockUI", "smart-table"]);
+var app = angular.module('app', ["ui.bootstrap", "ngAnimate", "ngRoute", "ngCookies", "blockUI", "smart-table", "trNgGrid"]);
 
 /**
  * Configure the Routes
  */
-var IPAddress = ""
+var IPAddress = "http://192.168.0.25:5000"
 
 app.config(['$routeProvider', function ($routeProvider) {
     $routeProvider
@@ -128,6 +128,12 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
     //        }
     //
     //    });
+    $scope.myItems = [{name: "Moroni", age: 50},
+        {name: "Tiancum", age: 43},
+        {name: "Jacob", age: 27},
+        {name: "Nephi", age: 29},
+        {name: "Enos", age: 99}];
+
 
     $scope.selectedItem = [];
 
@@ -171,6 +177,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
         $scope.historyList = response.data
 
         console.log($scope.historyList);
+
 
     }, function errorCallback(response) {
         // called asynchronously if an error occurs

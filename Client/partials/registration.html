@@ -2,10 +2,11 @@
     <div class="row main">
         <div class="panel-heading">
             <div class="panel-title text-center">
-                <h1 class="title">Blockchain Voucher App</h1>
-                <hr />
+                <h1 class="title" style="color: white">Blockchain Voucher App</h1>
+                <hr/>
             </div>
         </div>
+        <br/>
         <div class="main-login main-center">
             <form class="form-horizontal" method="post" action="#">
 
@@ -14,7 +15,8 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="username" id="username" ng-model="username" placeholder="Enter your Username"/>
+                            <input type="text" class="form-control" name="username" id="username" ng-model="username"
+                                   placeholder="Enter your Username"/>
                         </div>
                     </div>
                 </div>
@@ -24,25 +26,27 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <input type="password" class="form-control" name="password" id="password" ng-model="password"  placeholder="Enter your Password"/>
+                            <input type="password" class="form-control" name="password" id="password"
+                                   ng-model="password" placeholder="Enter your Password"/>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="password" class="cols-sm-2 control-label">Type</label>
+                    <label for="password" class="cols-sm-2 control-label">Type</label><br/>
                     <div class="cols-sm-10">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user-secret fa-lg" aria-hidden="true"></i></span>
-                            &nbsp &nbsp <input type="radio" ng-model="type" value="1"> Donor <br/>
-                            &nbsp &nbsp <input type="radio" ng-model="type" value="2"> Customer <br/>
-                            &nbsp &nbsp <input type="radio" ng-model="type" value="3"> Company <br/>
+                            <input type="radio" ng-model="type" value="1"> Donor <br/>
+                            <input type="radio" ng-model="type" value="2"> Customer <br/>
+                            <input type="radio" ng-model="type" value="3"> Company <br/>
                         </div>
                     </div>
                 </div>
-
+                <br/>
                 <div class="form-group ">
-                    <button type="button" class="btn btn-primary btn-lg btn-block login-button" ng-click="register()">Register</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block login-button" ng-click="register()">
+                        Register
+                    </button>
                 </div>
             </form>
         </div>

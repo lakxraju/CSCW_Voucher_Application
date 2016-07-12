@@ -2,10 +2,11 @@
     <div class="row main">
         <div class="panel-heading">
             <div class="panel-title text-center">
-                <h1 class="title">Blockchain Voucher App</h1>
-                <hr />
+                <h1 style="color: white;" class="title">Blockchain Voucher App</h1>
+                <hr/>
             </div>
         </div>
+        <br/>
         <div class="main-login main-center">
             <form class="form-horizontal" method="post" action="#">
 
@@ -13,26 +14,30 @@
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                            <input type="text" class="form-control" name="username" id="username" ng-model="username" placeholder="Username"/>
+                            <input style="font-size: 15px" type="text" class="form-control" name="username"
+                                   id="username" ng-model="username" placeholder="Username"/>
                         </div>
                     </div>
                 </div>
-
+                <br/>
                 <div class="form-group">
                     <div class="cols-sm-10">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                            <input type="password" class="form-control" name="password" id="password" ng-model="password"  placeholder="Password"/>
+                            <input style="font-size: 15px" type="password" class="form-control" name="password"
+                                   id="password" ng-model="password" placeholder="Password"/>
                         </div>
                     </div>
                 </div>
 
-
+                <br/><br/>
                 <div class="form-group ">
-                    <button type="button" class="btn btn-primary btn-lg btn-block login-button" ng-click="submit()">Login</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block login-button" ng-click="submit()">
+                        Login
+                    </button>
                 </div>
                 <div class="login-register">
-                    <a href="#/register">Register</a>
+                    <a href="#/register"><h5>Register </h5></a>
                 </div>
             </form>
         </div>

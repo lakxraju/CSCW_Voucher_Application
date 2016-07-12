@@ -4,9 +4,8 @@
  */
 
 .dropdown {
-    cursor:pointer;
+    cursor: pointer;
 }
-
 
 .img-home-portfolio,
 .img-customer,
@@ -82,16 +81,16 @@
     font-style: italic;
 }
 
-body, html{
+body, html {
     height: 100%;
     background-repeat: no-repeat;
-    background-color: #d3d3d3;
+    background-color: #575757;
     font-family: 'Oxygen', sans-serif;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
-.main{
+.main {
     margin-top: 70px;
 }
 
@@ -101,16 +100,16 @@ h1.title {
     font-weight: 400;
 }
 
-hr{
+hr {
     width: 10%;
     color: #fff;
 }
 
-.form-group{
+.form-group {
     margin-bottom: 15px;
 }
 
-label{
+label {
     margin-bottom: 15px;
 }
 
@@ -120,7 +119,7 @@ input::-webkit-input-placeholder {
     padding-top: 3px;
 }
 
-.main-login{
+.main-login {
     background-color: #fff;
     /* shadows and rounded borders */
     -moz-border-radius: 2px;
@@ -132,7 +131,7 @@ input::-webkit-input-placeholder {
 
 }
 
-.main-center{
+.main-center {
     margin-top: 30px;
     margin: 0 auto;
     max-width: 330px;
@@ -140,56 +139,49 @@ input::-webkit-input-placeholder {
 
 }
 
-.login-button{
+.login-button {
     margin-top: 5px;
 }
 
-.login-register{
+.login-register {
     font-size: 11px;
     text-align: center;
 }
 
-.st-selected{
-    border-left:4px solid black;
+.st-selected {
+    border-left: 4px solid black;
     background: orange;
 }
 
-
-th{
-    font-size: 20px;
+th {
+    font-size: 19px;
     text-align: center;
     width: 200px;
-    background-color:#9dcfff
+    background-color: #508d9f;
+    color: white;
 }
 
-table{
-    border: 1px solid black;
-}
-
-td{
-    width:200px;
+td {
+    width: 200px;
     text-align: center;
     font-size: 16px;
 
 }
 
-#radTable {
-    border: 0px;
-    width: 100%;
-    height: 2em;
+table {
+    background-color: #d0d6d5;
+    border: none;
 }
 
-/*.scrollwidth {*/
-    /*width: 60px;*/
-    /*height: 40px;*/
-/*}*/
+.text-muted {
+    color: white;
+}
 
-
-label{
+label {
     margin-bottom: 6px;
     margin-top: 6px;
 }
 
-.form-group{
+.form-group {
     margin-bottom: 0px;
 }

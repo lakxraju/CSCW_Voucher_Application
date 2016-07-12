@@ -7,18 +7,18 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><strong>{{items.username +"'s Vouchers"}}</strong></h1>
-            <h4>{{ "Type : " + items.usertype}}<br/>
+            <h1 class="page-header" style="color: white"><strong>{{ items.username +"'s Vouchers" }}</strong></h1>
+            <h4 style="color: white">{{ "Type : " + items.usertype }}<br/>
             </h4>
         </div>
     </div>
-<br/>
-<br/>
+    <br/>
+    <br/>
 
     <table st-table="items" class="table" style="background: white">
         <thead>
         <tr>
-            <th style="background: #2d6ca2"></th>
+            <th style="background: #61d1e3">Vouchers</th>
             <th>Name</th>
             <th>Value</th>
             <th>AssetID</th>
@@ -26,70 +26,75 @@
         </thead>
         <tbody>
         <tr ng-repeat="item in items.txnDetails">
-            <td style="background:#9dcfff"><input type="radio" id="radTable" name="item.txid" st-select-row="item" ng-click="selItem(item)"></td>
-            <td>{{item.name}}</td>
-            <td>{{item.value}}</td>
-            <td>{{item.txid}}</td>
+            <td style="background:#508d9f"><input type="radio" name="item.txid" st-select-row="item"
+                                                  ng-click="selItem(item)"></td>
+            <td style="width: 300px">{{ item.name | uppercase }}</td>
+            <td style="width: 360px">{{ item.value }}</td>
+            <td>{{ item.txid }}</td>
         </tr>
         </tbody>
     </table>
 
     <br/>
 
-    <button type="button" style="height: 4em; width:15em;" class="btn btn-primary" ng-click="newVoucher('lg')" ng-show="items.usertype=='Donor'">
-    <h4>Add a new voucher</h4>
+    <button type="button" style="height: 4em; width:15em;" class="btn btn-primary" ng-click="newVoucher('lg')"
+            ng-show="items.usertype=='Donor'">
+        <h4 style="font-weight: bold">Add a new voucher</h4>
     </button>
 
-    <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-success" ng-click="transferVoucher(selectedItem)"  ng-show="items.usertype=='Donor'">
-        <h4>Transfer</h4>
+    <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-success"
+            ng-click="transferVoucher(selectedItem)" ng-show="items.usertype=='Donor'">
+        <h4 style="font-weight: bold">Transfer</h4>
     </button>
 
-    <button type="button" style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success" ng-click="transferVoucher(selectedItem)"  ng-show="items.usertype!='Donor'">
-    <h4>Redeem</h4>
-</button>
-
-<br/> <br/> <br/>
-<br/> <br/> <br/>
+    <button type="button" style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success"
+            ng-click="transferVoucher(selectedItem)" ng-show="items.usertype!='Donor'">
+        <h4 style="font-weight: bold">Redeem</h4>
+    </button>
 
 
-      <table st-table="historyList" class="table" style="background: #efede7">
-        <thead>
-        <th colspan="6" style="background-color:#bebcb6"> <h2>History of Transactions</h2> </th>
-        <tr>
-            <th st-sort="name">Name</th>
-            <th st-sort="value">Value</th>
-            <th st-sort="type">Type</th>
-              <th st-sort="from">Sender</th>
-              <th st-sort="to">Receiver</th>
-              <th st-sort="datetime">TimeStamp</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="h in historyList.history">
-            <td>{{h.name}}</td>
-            <td>{{h.value}}</td>
-            <td>{{h.type}}</td>
-             <td>{{h.from}}</td>
-            <td>{{h.to}}</td>
-            <td>{{h.datetime }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div id="history" style="margin-top: 120px; position: relative">
+        <h3 style="color: white;"> Transaction History </h3>
 
+        <table tr-ng-grid="" items="historyList.history" selection-mode="None" page-items="10" enable-filtering="true"
+               enable-sorting="true">
+            <thead>
+            <tr>
+                <th field-name="blockNumber" display-name="Block" display-align="center"
+                    display-format="uppercase"></th>
+                <th field-name="name" display-name="Name" display-align="center" display-format="uppercase"
+                    style="width: 300px;">
+                </th>
+                <th field-name="value" display-name="Value" display-align="center"
+                    style="width: 360px">
+                </th>
+                <th field-name="type" display-name="Type" display-align="center">
+                </th>
+                <th field-name="from" display-name="Sender" display-align="center">
+                </th>
+                <th field-name="to" display-name="Receiver" display-align="center">
+                </th>
+                <th field-name="datetime" display-name="Timestamp" display-align="center">
+                </th>
+            </tr>
+            </thead>
+        </table>
+
+    </div>
 
 
 </div>
 <!-- /.container -->
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
-        <h2 class="modal-title"><strong>{{vname}}</strong></h2>
+        <h2 class="modal-title"><strong>{{ vname }}</strong></h2>
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <label><h4> <strong>Transfer To : </strong></h4></label> &nbsp;
-              <select ng-model="selCust" ng-options="cust as cust.username for cust in customerList">
-                  <option value="">---Please select---</option>
-              </select>
+            <label><h4><strong>Transfer To : </strong></h4></label> &nbsp;
+            <select ng-model="selCust" ng-options="cust as cust.username for cust in customerList">
+                <option value="">---Please select---</option>
+            </select>
         </div>
 
     </div>
@@ -104,7 +109,7 @@
 
 <script type="text/ng-template" id="myModalContent2.html">
     <div class="modal-header">
-        <h3 class="modal-title"><strong>{{nameOfVoucher}}</strong></h3>
+        <h3 class="modal-title"><strong>{{ nameOfVoucher }}</strong></h3>
     </div>
     <div class="modal-body">
 
