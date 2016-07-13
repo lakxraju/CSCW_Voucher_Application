@@ -185,3 +185,8 @@ label {
 .form-group {
     margin-bottom: 0px;
 }
+
+.app-modal-window .modal-dialog {
+  width: 50%;
+    height:auto;
+}

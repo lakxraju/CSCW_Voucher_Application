@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="113ed269-e058-4f7e-bae3-36516894f223" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Client/index.html" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/css/main.css" afterPath="$PROJECT_DIR$/Client/css/main.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/js/main.js" afterPath="$PROJECT_DIR$/Client/js/main.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/partials/main.html" afterPath="$PROJECT_DIR$/Client/partials/main.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/partials/registration.html" afterPath="$PROJECT_DIR$/Client/partials/registration.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Server/templates/index.html" afterPath="$PROJECT_DIR$/Server/templates/index.html" />
     </list>
     <ignored path="CSCW_Voucher_Application.iws" />
@@ -30,31 +32,19 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-375">
+            <state relative-caret-position="420">
               <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="200">
               <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CSCW_Voucher_Application.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Server/CSCW_Voucher_Application.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6060">
-              <caret line="303" column="20" selection-start-line="303" selection-start-column="20" selection-end-line="303" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#61#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -81,10 +71,10 @@
         <option value="$PROJECT_DIR$/Client/css/newbootstrap.css" />
         <option value="$PROJECT_DIR$/Client/css/test.css" />
         <option value="$PROJECT_DIR$/Client/css/bootstrap.min.css" />
+        <option value="$PROJECT_DIR$/Client/partials/login.html" />
         <option value="$PROJECT_DIR$/Client/partials/registration.html" />
         <option value="$PROJECT_DIR$/Client/css/main.css" />
         <option value="$PROJECT_DIR$/Client/index.html" />
-        <option value="$PROJECT_DIR$/Client/partials/login.html" />
         <option value="$PROJECT_DIR$/Client/partials/main.html" />
         <option value="$PROJECT_DIR$/Client/js/main.js" />
       </list>
@@ -261,10 +251,10 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Workspace\CSCW_Voucher_Application\Server\templates" />
+      <recent name="D:\Workspace\CSCW_Voucher_Application\Client" />
       <recent name="D:\Workspace\CSCW_Voucher_Application\Client\fonts" />
       <recent name="D:\Workspace\CSCW_Voucher_Application\Client\css" />
       <recent name="D:\Workspace\CSCW_Voucher_Application\Client\js" />
-      <recent name="D:\Workspace\CSCW_Voucher_Application\Client" />
     </key>
   </component>
   <component name="RunManager" selected="JavaScript Debug.index.html (2)">
@@ -272,6 +262,12 @@
       <method />
     </configuration>
     <configuration default="false" name="index.html (1)" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63343/CSCW_Voucher_Application/Server/templates/index.html">
+      <method />
+    </configuration>
+    <configuration default="false" name="main.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSCW_Voucher_Application/Client/partials/main.html">
+      <method />
+    </configuration>
+    <configuration default="false" name="index.html (3)" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/CSCW_Voucher_Application/Server/templates/index.html">
       <method />
     </configuration>
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
@@ -485,15 +481,19 @@
     <configuration default="false" name="index.html (2)" type="JavascriptDebugType" factoryName="JavaScript Debug" nameIsGenerated="true" uri="http://localhost:63342/CSCW_Voucher_Application/Client/index.html">
       <method />
     </configuration>
-    <list size="3">
+    <list size="5">
       <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.html (2)" />
       <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
       <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.index.html (1)" />
+      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.main.html" />
+      <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.index.html (3)" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
-        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.index.html (1)" />
+      <list size="4">
+        <item index="0" class="java.lang.String" itemvalue="JavaScript Debug.index.html (3)" />
+        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.main.html" />
+        <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
+        <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.index.html (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -517,15 +517,15 @@
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26233906" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.26609442" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32807216" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32807216" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3990878" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -553,6 +553,40 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Server/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/js/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server/CSCW_Voucher_Application.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5780">
+          <caret line="303" column="20" selection-start-line="303" selection-start-column="20" selection-end-line="303" selection-end-column="20" />
+          <folding>
+            <element signature="e#0#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="720">
+          <caret line="36" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="75" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Client/partials/registration.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="520">
@@ -566,19 +600,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -622,19 +644,7 @@
         <state relative-caret-position="1780">
           <caret line="89" column="37" selection-start-line="89" selection-start-column="37" selection-end-line="89" selection-end-column="37" />
           <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -693,19 +703,7 @@
         <state relative-caret-position="1780">
           <caret line="89" column="37" selection-start-line="89" selection-start-column="37" selection-end-line="89" selection-end-column="37" />
           <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -756,19 +754,7 @@
         <state relative-caret-position="1460">
           <caret line="73" column="28" selection-start-line="73" selection-start-column="28" selection-end-line="73" selection-end-column="28" />
           <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -800,34 +786,18 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="440">
           <caret line="22" column="20" selection-start-line="22" selection-start-column="20" selection-end-line="22" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/css/newbootstrap.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/css/newbootstrap.css" />
     <entry file="file://$PROJECT_DIR$/Client/fonts/glyphicons-halflings-regular.woff">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/css/test.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3721">
-          <caret line="804" column="0" selection-start-line="804" selection-start-column="0" selection-end-line="804" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/css/test.css" />
     <entry file="file://$PROJECT_DIR$/Client/css/bootstrap.min.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="580">
@@ -840,7 +810,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="690">
           <caret line="555" column="31" selection-start-line="0" selection-start-column="0" selection-end-line="555" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -848,15 +817,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="32" column="1" selection-start-line="0" selection-start-column="0" selection-end-line="186" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -864,15 +824,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Client/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-113">
-          <caret line="36" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="75" selection-end-column="7" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -880,47 +831,56 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="440">
           <caret line="23" column="44" selection-start-line="0" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
-          <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#div#0;n#form#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#input#0;n#div#0;n#div#0;n#div#1;n#form#0;n#div#1;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/partials/main.html">
+    <entry file="file://$PROJECT_DIR$/Client/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1620">
-          <caret line="81" column="0" selection-start-line="81" selection-start-column="0" selection-end-line="81" selection-end-column="0" />
+        <state relative-caret-position="145">
+          <caret line="28" column="56" selection-start-line="0" selection-start-column="0" selection-end-line="78" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server/CSCW_Voucher_Application.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-716">
+          <caret line="447" column="32" selection-start-line="447" selection-start-column="23" selection-end-line="447" selection-end-column="32" />
           <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#0;n#tr#0;n#thead#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#0;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#td#2;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h4#0;n#button#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#1;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#th#2;n#tr#0;n#thead#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#0#61#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/partials/registration.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="860">
-          <caret line="43" column="22" selection-start-line="43" selection-start-column="22" selection-end-line="43" selection-end-column="22" />
+        <state relative-caret-position="447">
+          <caret line="43" column="19" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="19" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="665">
+          <caret line="189" column="11" selection-start-line="189" selection-start-column="11" selection-end-line="189" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/partials/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="106" column="11" selection-start-line="0" selection-start-column="0" selection-end-line="170" selection-end-column="0" />
+          <folding>
+            <element signature="n#style#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#1;n#div#0;n#!!top" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Server/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-375">
+        <state relative-caret-position="420">
           <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
@@ -931,16 +891,6 @@
         <state relative-caret-position="200">
           <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/CSCW_Voucher_Application.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6060">
-          <caret line="303" column="20" selection-start-line="303" selection-start-column="20" selection-end-line="303" selection-end-column="20" />
-          <folding>
-            <element signature="e#0#61#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>

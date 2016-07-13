@@ -28,7 +28,7 @@
         <tr ng-repeat="item in items.txnDetails">
             <td style="background:#508d9f"><input type="radio" name="item.txid" st-select-row="item"
                                                   ng-click="selItem(item)"></td>
-            <td style="width: 300px">{{ item.name | uppercase }}</td>
+            <td style="width: 300px;font-weight: bold">{{ item.name }}</td>
             <td style="width: 360px">{{ item.value }}</td>
             <td>{{ item.txid }}</td>
         </tr>
@@ -56,13 +56,14 @@
     <div id="history" style="margin-top: 120px; position: relative">
         <h3 style="color: white;"> Transaction History </h3>
 
-        <table tr-ng-grid="" items="historyList.history" selection-mode="None" page-items="10" enable-filtering="true"
+
+        <table tr-ng-grid items="historyList.history" selection-mode="None" page-items="10" enable-filtering="true"
                enable-sorting="true">
             <thead>
             <tr>
                 <th field-name="blockNumber" display-name="Block" display-align="center"
                     display-format="uppercase"></th>
-                <th field-name="name" display-name="Name" display-align="center" display-format="uppercase"
+                <th field-name="name" display-name="Name" display-align="center"
                     style="width: 300px;">
                 </th>
                 <th field-name="value" display-name="Value" display-align="center"
@@ -78,7 +79,23 @@
                 </th>
             </tr>
             </thead>
+            <tbody>
+            <tr>
+                <td field-name="blockNumber">
+                    <div>
+                        <button class="btn btn-default"
+                                ng-click="getBlockDetails(gridItem.blockNumber);$event.stopPropagation();">
+                            <b>Block {{ gridItem.blockNumber }}</b>
+                        </button>
+                    </div>
+                </td>
+                <td field-name="name" style="font-weight: bold">
+                    {{ gridItem.name }}
+                </td>
+            </tr>
+            </tbody>
         </table>
+
 
     </div>
 
@@ -87,7 +104,7 @@
 <!-- /.container -->
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
-        <h2 class="modal-title"><strong>{{ vname }}</strong></h2>
+        <h3 class="modal-title"><strong>{{ vname }}</strong></h3>
     </div>
     <div class="modal-body">
         <div class="form-group">
@@ -109,7 +126,7 @@
 
 <script type="text/ng-template" id="myModalContent2.html">
     <div class="modal-header">
-        <h3 class="modal-title"><strong>{{ nameOfVoucher }}</strong></h3>
+        <h2 class="modal-title"><strong>{{ nameOfVoucher }}</strong></h2>
     </div>
     <div class="modal-body">
 
@@ -129,6 +146,24 @@
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="myModalContent3.html">
+    <div class="modal-header">
+        <h3 class="modal-title"><strong>Block {{ blockNumber }}</strong></h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="form-group">
+
+
+            <pre class='json' json='blockDetails' pretty-json/>
+
+
+        </div>
+
     </div>
 </script>
 
