@@ -271,17 +271,6 @@ def sendStaticFile2(path):
     print("/Client/" + path)
     return send_from_directory(os.path.dirname(os.getcwd()) + "/Client/partials/", path)
 
-@app.route('/voucherApp/getBlockContents', methods=['GET'])
-def getBlockDetails():
-    # Specifying Mandatory Arguments
-    parser = reqparse.RequestParser()
-    parser.add_argument("blockNumber", required=True, type=int)
-    blockNumber = request.args.get("blockNumber")
-
-    if(r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).count().run(conn) > 0):
-        return jsonify(blockContents = r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).run(conn))
-    else:
-        return jsonify(errorMessage = "Queried Block Number doesn't exist!")
 
 @app.route('/voucherApp/getOwnedIDs', methods=['GET'])
 def getOwnedIDs():
@@ -437,6 +426,7 @@ def getCustomerList():
     dataList = list(data)
     return json.dumps(dataList)
 
+
 @app.route('/voucherApp/getBlockContents', methods=['GET'])
 def getBlockDetails():
     # Specifying Mandatory Arguments
@@ -448,6 +438,7 @@ def getBlockDetails():
         return jsonify(blockDetails=list(r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).run(conn))[0])
     else:
         return jsonify(errorMessage = "Queried Block Number doesn't exist!")
+
 
 @app.route('/voucherApp/getHistory', methods=['GET'])
 def get_owned_assets():
