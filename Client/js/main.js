@@ -237,8 +237,11 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             else if ($scope.items.usertype == 'Customer' || 'Company') {
 
                 console.log($scope.items.usertype)
-                blockUI.start("Transferring voucher...");
 
+                if ($scope.items.usertype == 'Customer')
+                    blockUI.start("Transferring voucher to " + transferData.name + " ...");
+                else if ($scope.items.usertype == 'Company')
+                    blockUI.start("Transferring voucher to " + transferData.donor + " ...");
                 $timeout(function () {
                     blockUI.message('Adding transaction to bigchain...');
                 }, 2000);
@@ -405,7 +408,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
     $scope.ok = function () {
 
 
-        blockUI.start("Transferring voucher...");
+        blockUI.start("Transferring voucher to " + $scope.selCust.username + " ...");
 
         $timeout(function () {
             blockUI.message('Adding transaction to bigchain...');

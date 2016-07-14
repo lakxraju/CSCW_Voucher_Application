@@ -41,14 +41,16 @@
 
     <br/>
 
-    <button type="button" style="height: 4em; width:15em;" class="btn btn-primary" ng-click="newVoucher('lg')"
+    <button type="button" style="height: 4em; width:15em;float: left" class="btn btn-primary"
+            ng-click="newVoucher('lg')"
             ng-show="items.usertype=='Donor'">
         <h4 style="font-weight: bold">Add a new voucher</h4>
     </button>
 
-    <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-danger"
+    <button type="button" style="height: auto; width:auto;float: left;position: relative;margin-left: 10px"
+            class="btn btn-primary"
             ng-click="toAll('lm')" ng-if="items.usertype=='Donor'">
-        <h4 style="font-weight: bold">Transfer to All</h4>
+        <h4 style="font-weight: bold">Create & Transfer (All Customers)</h4>
     </button>
 
     <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-success"
@@ -58,7 +60,8 @@
     </button>
 
 
-    <button ng-hide="!items.txnDetails.length" type="button" style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success"
+    <button ng-hide="!items.txnDetails.length" type="button"
+            style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success"
             ng-click="transferVoucher(selectedItem)" ng-if="items.usertype!='Donor'">
         <h4 style="font-weight: bold">Redeem</h4>
     </button>
@@ -148,7 +151,7 @@
             <br>
             <label>Description</label>:</label>
             <input type="text" ng-model="valueOfVoucher" class="form-control">
-
+            <br>
         </div>
 
     </div>
