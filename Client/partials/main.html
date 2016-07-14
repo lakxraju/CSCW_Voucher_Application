@@ -46,6 +46,11 @@
         <h4 style="font-weight: bold">Add a new voucher</h4>
     </button>
 
+    <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-danger"
+            ng-click="toAll('lm')" ng-if="items.usertype=='Donor'">
+        <h4 style="font-weight: bold">Transfer to All</h4>
+    </button>
+
     <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-success"
             ng-click="transferVoucher(selectedItem)" ng-if="items.usertype=='Donor'"
             ng-hide="!items.txnDetails.length">

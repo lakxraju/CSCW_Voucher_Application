@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="113ed269-e058-4f7e-bae3-36516894f223" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/js/main.js" afterPath="$PROJECT_DIR$/Client/js/main.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/partials/main.html" afterPath="$PROJECT_DIR$/Client/partials/main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Client/templates/header.html" afterPath="$PROJECT_DIR$/Client/templates/header.html" />
     </list>
     <ignored path="CSCW_Voucher_Application.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,8 +38,8 @@
       <file leaf-file-name="main.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/partials/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="18" column="81" selection-start-line="18" selection-start-column="81" selection-end-line="18" selection-end-column="81" />
+            <state relative-caret-position="420">
+              <caret line="48" column="94" selection-start-line="48" selection-start-column="94" selection-end-line="48" selection-end-column="94" />
               <folding>
                 <element signature="n#style#0;n#table#0;n#div#0;n#!!top" expanded="true" />
               </folding>
@@ -49,10 +47,20 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="CSCW_Voucher_Application.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Server/CSCW_Voucher_Application.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3300">
+              <caret line="179" column="24" selection-start-line="179" selection-start-column="24" selection-end-line="179" selection-end-column="48" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/js/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
+            <state relative-caret-position="20">
               <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
               <folding />
             </state>
@@ -85,8 +93,8 @@
         <option value="$PROJECT_DIR$/Client/partials/registration.html" />
         <option value="$PROJECT_DIR$/Client/css/main.css" />
         <option value="$PROJECT_DIR$/Client/index.html" />
-        <option value="$PROJECT_DIR$/Client/partials/main.html" />
         <option value="$PROJECT_DIR$/Client/templates/header.html" />
+        <option value="$PROJECT_DIR$/Client/partials/main.html" />
         <option value="$PROJECT_DIR$/Client/js/main.js" />
       </list>
     </option>
@@ -883,16 +891,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Server/CSCW_Voucher_Application.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="179" column="24" selection-start-line="179" selection-start-column="24" selection-end-line="179" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#61#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Server/templates/index.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-435">
@@ -909,13 +907,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/partials/main.html">
+    <entry file="file://$PROJECT_DIR$/Server/CSCW_Voucher_Application.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="18" column="81" selection-start-line="18" selection-start-column="81" selection-end-line="18" selection-end-column="81" />
-          <folding>
-            <element signature="n#style#0;n#table#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="3300">
+          <caret line="179" column="24" selection-start-line="179" selection-start-column="24" selection-end-line="179" selection-end-column="48" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -927,9 +923,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Client/partials/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="48" column="94" selection-start-line="48" selection-start-column="94" selection-end-line="48" selection-end-column="94" />
+          <folding>
+            <element signature="n#style#0;n#table#0;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Client/js/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
+        <state relative-caret-position="20">
           <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
           <folding />
         </state>
