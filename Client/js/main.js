@@ -41,25 +41,42 @@ app.controller('LoginCtrl', function ($scope, $http, $location, $cookies) {
 
                 console.log(data);
 
-                $cookies.put("privkey", data.privateKey);
-                console.log(data.privateKey + "-----1------2---3----")
-                $cookies.put("user", user);
+                if (data.status == "error")
+                    alert(data.errorMessage);
 
 
-                $cookies.put("pubkey", data.publicKey);
-                var value = $cookies.get("privkey");
+                else {
+                    $cookies.put("privkey", data.privateKey);
+                    console.log(data.privateKey + "-----1------2---3----")
+                    $cookies.put("user", user);
 
-                console.log(value);
 
-                $location.path('/main');
+                    $cookies.put("pubkey", data.publicKey);
+                    var value = $cookies.get("privkey");
 
+                    console.log(value);
+
+                    $location.path('/main');
+                }
             });
         }
 
         else {
-            alert("Invalid Login");
+            alert("Enter both username and password");
         }
     };
+
+
+    $scope.clearData = function () {
+
+
+        $cookies.remove("user");
+        $cookies.remove("privkey");
+        $cookies.remove("pubkey");
+
+        $location.path('/');
+
+    }
 });
 
 
@@ -128,12 +145,6 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
     //        }
     //
     //    });
-    $scope.myItems = [{name: "Moroni", age: 50},
-        {name: "Tiancum", age: 43},
-        {name: "Jacob", age: 27},
-        {name: "Nephi", age: 29},
-        {name: "Enos", age: 99}];
-
 
     $scope.selectedItem = [];
 
@@ -535,7 +546,7 @@ app.controller('ModalInstanceCtrl4', function ($scope, $http, $uibModalInstance,
             url: IPAddress + '/voucherApp/createAndTransferVoucher',
             headers: {'Content-Type': 'application/json'},
             data: {
-                username: trans_from,
+                source_username: trans_from,
                 voucher_name: vname,
                 value: vvalue
             }
