@@ -326,13 +326,32 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             size: size,
             resolve: {
                 items: function () {
-                    return {'data': $scope.items}
+                    return {}
                 }
             }
 
         });
 
     };
+
+    $scope.toAll = function (size) {
+
+
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'myModalContent2.html',
+            controller: 'ModalInstanceCtrl4',
+            size: size,
+            resolve: {
+                items: function () {
+                    return {}
+                }
+            }
+
+        });
+
+    };
+
 
     $scope.getBlockDetails = function (blkNumber) {
 
@@ -434,9 +453,6 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
 
 
 app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
-    $scope.items = items.data;
-
-    console.log(items);
 
     $scope.ok = function () {
 
@@ -464,9 +480,10 @@ app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance,
 
             if (data.status == "error")
                 alert(data.errorMessage);
-            else
+            else {
                 $uibModalInstance.close();
-            $window.location.reload();
+                $window.location.reload();
+            }
 
         });
 
@@ -498,6 +515,47 @@ app.controller('ModalInstanceCtrl3', function ($scope, $http, $uibModalInstance,
         // or server returns response with an error status.
     });
 
+});
+
+app.controller('ModalInstanceCtrl4', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
+
+    $scope.ok = function () {
+
+        var trans_from = $cookies.get("user");
+        var vname = $scope.nameOfVoucher;
+        var vvalue = $scope.valueOfVoucher;
+
+        console.log(trans_from);
+        console.log(vname);
+        console.log(vvalue);
+
+
+        $http({
+            method: 'POST',
+            url: IPAddress + '/voucherApp/createAndTransferVoucher',
+            headers: {'Content-Type': 'application/json'},
+            data: {
+                username: trans_from,
+                voucher_name: vname,
+                value: vvalue
+            }
+        }).success(function (data) {
+
+            console.log(data);
+
+            if (data.status == "error")
+                alert(data.errorMessage);
+            else
+                $uibModalInstance.close();
+            $window.location.reload();
+
+        });
+
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
 });
 
 

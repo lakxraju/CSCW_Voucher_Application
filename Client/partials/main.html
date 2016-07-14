@@ -47,6 +47,12 @@
         <h4 style="font-weight: bold">Transfer</h4>
     </button>
 
+     <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-danger"
+            ng-click="toAll('lg')" ng-show="items.usertype=='Donor'">
+        <h4 style="font-weight: bold">Transfer to all</h4>
+    </button>
+
+
     <button type="button" style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success"
             ng-click="transferVoucher(selectedItem)" ng-show="items.usertype!='Donor'">
         <h4 style="font-weight: bold">Redeem</h4>
