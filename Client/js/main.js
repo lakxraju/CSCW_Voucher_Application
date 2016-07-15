@@ -121,8 +121,6 @@ app.controller('RegCtrl', function ($scope, $location, $http, $cookies) {
 
 app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cookies, $timeout, blockUI, $window) {
 
-
-    $scope.nameOfVoucher = "";
     $scope.valueOfVoucher = "";
     $scope.blockDetails = [];
 
@@ -201,6 +199,18 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
     }).then(function successCallback(response) {
 
         $scope.customerList = response.data
+
+    }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+    });
+
+    $http({
+        method: 'GET',
+        url: IPAddress + '/voucherApp/companys'
+    }).then(function successCallback(response) {
+
+        $scope.companyList = response.data
 
     }, function errorCallback(response) {
         // called asynchronously if an error occurs
@@ -340,7 +350,9 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             size: size,
             resolve: {
                 items: function () {
-                    return {}
+                    return {
+                        'cList': $scope.companyList
+                    }
                 }
             }
 
@@ -358,7 +370,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             size: size,
             resolve: {
                 items: function () {
-                    return {}
+                    return {'cList': $scope.companyList}
                 }
             }
 
@@ -468,10 +480,14 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
 
 app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
 
+
+    $scope.companyList = items.cList;
+    $scope.selComp = null;
+
     $scope.ok = function () {
 
         var trans_from = $cookies.get("user");
-        var vname = $scope.nameOfVoucher;
+        var vname = $scope.selComp.username;
         var vvalue = $scope.valueOfVoucher;
 
         console.log(trans_from);
@@ -533,10 +549,14 @@ app.controller('ModalInstanceCtrl3', function ($scope, $http, $uibModalInstance,
 
 app.controller('ModalInstanceCtrl4', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
 
+
+    $scope.companyList = items.cList;
+    $scope.selComp = null;
+
     $scope.ok = function () {
 
         var trans_from = $cookies.get("user");
-        var vname = $scope.nameOfVoucher;
+        var vname = $scope.selComp.username;
         var vvalue = $scope.valueOfVoucher;
 
         console.log(trans_from);
