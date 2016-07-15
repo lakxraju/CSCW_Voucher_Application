@@ -7,18 +7,22 @@
 
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><strong>{{items.username +"'s Vouchers"}}</strong></h1>
-            <h4>{{ "Type : " + items.usertype}}<br/>
+            <h1 class="page-header" style="color: white"><strong>{{ items.username +"'s Vouchers" }}</strong></h1>
+            <h4 style="color: white">{{ "Type : " + items.usertype }}<br/>
             </h4>
         </div>
     </div>
-<br/>
-<br/>
+    <br/>
+    <br/>
 
-    <table st-table="items" class="table" style="background: white">
+
+    <h4 style="color: white;" ng-hide="items.txnDetails.length"> No vouchers to display! </h4>
+
+
+    <table ng-hide="!items.txnDetails.length" st-table="items" class="table" style="background: white">
         <thead>
         <tr>
-            <th style="background: #2d6ca2"></th>
+            <th style="background: #61d1e3">Vouchers</th>
             <th>Name</th>
             <th>Value</th>
             <th>AssetID</th>
@@ -26,70 +30,102 @@
         </thead>
         <tbody>
         <tr ng-repeat="item in items.txnDetails">
-            <td style="background:#9dcfff"><input type="radio" id="radTable" name="item.txid" st-select-row="item" ng-click="selItem(item)"></td>
-            <td>{{item.name}}</td>
-            <td>{{item.value}}</td>
-            <td>{{item.txid}}</td>
+            <td style="background:#508d9f"><input type="radio" name="item.txid" st-select-row="item"
+                                                  ng-click="selItem(item)"></td>
+            <td style="width: 300px;font-weight: bold">{{ item.name }}</td>
+            <td style="width: 360px">{{ item.value }}</td>
+            <td>{{ item.txid }}</td>
         </tr>
         </tbody>
     </table>
 
     <br/>
 
-    <button type="button" style="height: 4em; width:15em;" class="btn btn-primary" ng-click="newVoucher('lg')" ng-show="items.usertype=='Donor'">
-    <h4>Add a new voucher</h4>
+    <button type="button" style="height: 4em; width:15em;float: left" class="btn btn-primary"
+            ng-click="newVoucher('lg')"
+            ng-show="items.usertype=='Donor'">
+        <h4 style="font-weight: bold">Add a new voucher</h4>
     </button>
 
-    <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-success" ng-click="transferVoucher(selectedItem)"  ng-show="items.usertype=='Donor'">
-        <h4>Transfer</h4>
+    <button type="button" style="height: auto; width:auto;float: left;position: relative;margin-left: 10px"
+            class="btn btn-primary"
+            ng-click="toAll('lg')" ng-if="items.usertype=='Donor'">
+        <h4 style="font-weight: bold">Create & Transfer (All Customers)</h4>
     </button>
 
-    <button type="button" style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success" ng-click="transferVoucher(selectedItem)"  ng-show="items.usertype!='Donor'">
-    <h4>Redeem</h4>
-</button>
+    <button type="button" style="height: 4em; width:15em;float: right;" class="btn btn-success"
+            ng-click="transferVoucher(selectedItem)" ng-if="items.usertype=='Donor'"
+            ng-hide="!items.txnDetails.length">
+        <h4 style="font-weight: bold">Transfer</h4>
+    </button>
 
-<br/> <br/> <br/>
-<br/> <br/> <br/>
+
+    <button ng-hide="!items.txnDetails.length" type="button"
+            style="height: 4em; width:15em; display: block;margin: 0 auto;" class="btn btn-success"
+            ng-click="transferVoucher(selectedItem)" ng-if="items.usertype!='Donor'">
+        <h4 style="font-weight: bold">Redeem</h4>
+    </button>
 
 
-      <table st-table="historyList" class="table" style="background: #efede7">
-        <thead>
-        <th colspan="6" style="background-color:#bebcb6"> <h2>History of Transactions</h2> </th>
-        <tr>
-            <th st-sort="name">Name</th>
-            <th st-sort="value">Value</th>
-            <th st-sort="type">Type</th>
-              <th st-sort="from">Sender</th>
-              <th st-sort="to">Receiver</th>
-              <th st-sort="datetime">TimeStamp</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="h in historyList.history">
-            <td>{{h.name}}</td>
-            <td>{{h.value}}</td>
-            <td>{{h.type}}</td>
-             <td>{{h.from}}</td>
-            <td>{{h.to}}</td>
-            <td>{{h.datetime }}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div id="history" style="margin-top: 120px; position: relative">
+        <h3 style="color: white;"> Transaction History </h3>
 
+
+        <table tr-ng-grid items="historyList.history" selection-mode="None" page-items="10" enable-filtering="true"
+               enable-sorting="true">
+            <thead>
+            <tr>
+                <th field-name="blockNumber" display-name="Block" display-align="center"
+                    display-format="uppercase"></th>
+                <th field-name="name" display-name="Name" display-align="center"
+                    style="width: 300px;">
+                </th>
+                <th field-name="value" display-name="Value" display-align="center"
+                    style="width: 360px">
+                </th>
+                <th field-name="type" display-name="Type" display-align="center">
+                </th>
+                <th field-name="from" display-name="Sender" display-align="center">
+                </th>
+                <th field-name="to" display-name="Receiver" display-align="center">
+                </th>
+                <th field-name="datetime" display-name="Timestamp" display-align="center">
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td field-name="blockNumber">
+                    <div>
+                        <button class="btn btn-default"
+                                ng-click="getBlockDetails(gridItem.blockNumber);$event.stopPropagation();">
+                            <b>Block {{ gridItem.blockNumber }}</b>
+                        </button>
+                    </div>
+                </td>
+                <td field-name="name" style="font-weight: bold">
+                    {{ gridItem.name }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+    </div>
 
 
 </div>
 <!-- /.container -->
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
-        <h2 class="modal-title"><strong>{{vname}}</strong></h2>
+        <h3 class="modal-title"><strong>{{ vname }}</strong></h3>
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <label><h4> <strong>Transfer To : </strong></h4></label> &nbsp;
-              <select ng-model="selCust" ng-options="cust as cust.username for cust in customerList">
-                  <option value="">---Please select---</option>
-              </select>
+            <label><h4><strong>Transfer To : </strong></h4></label> &nbsp;
+            <select style="width:250px" ng-model="selCust" ng-options="cust as cust.username for cust in customerList">
+                <option value="">---Please select---</option>
+            </select>
         </div>
 
     </div>
@@ -103,19 +139,19 @@
 
 
 <script type="text/ng-template" id="myModalContent2.html">
-    <div class="modal-header">
-        <h3 class="modal-title"><strong>{{nameOfVoucher}}</strong></h3>
-    </div>
+
     <div class="modal-body">
 
         <div class="form-group">
 
-            <label>Company</label>:</label>
-            <input type="text" ng-model="nameOfVoucher" class="form-control">
+            <label><h4><b>Company</b></h4></label> :</label>
+            &nbsp;<select style="width:250px" ng-model="selComp" ng-options="comp as comp.username for comp in companyList">
+                <option value="">---Please select---</option>
+            </select>
             <br>
-            <label>Description</label>:</label>
+            <label><h4><b>Description</b></h4></label> :</label>
             <input type="text" ng-model="valueOfVoucher" class="form-control">
-
+            <br>
         </div>
 
     </div>
@@ -124,6 +160,24 @@
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
         <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="myModalContent3.html">
+    <div class="modal-header">
+        <h3 class="modal-title"><strong>Block {{ blockNumber }}</strong></h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="form-group">
+
+
+            <pre class='json' json='blockDetails' pretty-json/>
+
+
+        </div>
+
     </div>
 </script>
 

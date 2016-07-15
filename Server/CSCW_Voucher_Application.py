@@ -195,8 +195,9 @@ def createAndTransferVoucher():
     voucherName = request.get_json(force=False)['voucher_name']
     source_username = request.get_json(force=False)[UserAttributes.SOURCE_USERNAME.value]
     value = request.get_json(force=False)['value']
-    data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).filter({'type': UserType.CONSUMER.value}).pluck('source_username').run(conn)
+    data = r.db(DatabaseNames.CUSTOM_DB.value).table(TableNames.USER.value).filter({'type': UserType.CONSUMER.value}).pluck('username').run(conn)
     customerList = list(data)
+    print(customerList)
     non_transferred_assets = []
 
     if (not checkIfTheUserExists(source_username)):
@@ -208,16 +209,15 @@ def createAndTransferVoucher():
     elif (not UserType.COMPANY.value == getUserType(voucherName)):
         return jsonify(status="error", errorMessage="Voucher name is not valid! Hint: Voucher name should match a company")
 
-    for idx,currentCustomer in enumerate(customerList):
+    for idx, currentCustomer in enumerate(customerList):
         voucherPayload = {}
         voucherPayload["name"] = voucherName # its also the company name
         voucherPayload["value"] = value
         voucherPayload["from"] = source_username
-        voucherPayload["to"] = currentCustomer
+        voucherPayload["to"] = currentCustomer['username']
         voucherPayload["donor_name"] = source_username
         voucherPayload["combo"] = source_username
-        user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, currentCustomer)[
-            UserAttributes.PUBLIC_KEY.value]
+        user_pub_key = getTupleFromDB(DatabaseNames.CUSTOM_DB.value, TableNames.USER.value, currentCustomer['username'])[UserAttributes.PUBLIC_KEY.value]
         tx = b.create_transaction(b.me, user_pub_key, None, Operations.CREATE.value, payload=voucherPayload)
         tx_signed = b.sign_transaction(tx, b.me_private)
         if b.is_valid_transaction(tx_signed):
@@ -230,6 +230,7 @@ def createAndTransferVoucher():
     if(len(non_transferred_assets) > 0):
         return jsonify(status = "error", errorMessage = "Not transferred to all. Error Occurred", non_transferred_companies=non_transferred_assets)
     else:
+        print("Success")
         return jsonify(status = "success", message = "Transferred to all")
 
 
@@ -271,17 +272,6 @@ def sendStaticFile2(path):
     print("/Client/" + path)
     return send_from_directory(os.path.dirname(os.getcwd()) + "/Client/partials/", path)
 
-@app.route('/voucherApp/getBlockContents', methods=['GET'])
-def getBlockDetails():
-    # Specifying Mandatory Arguments
-    parser = reqparse.RequestParser()
-    parser.add_argument("blockNumber", required=True, type=int)
-    blockNumber = request.args.get("blockNumber")
-
-    if(r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).count().run(conn) > 0):
-        return jsonify(blockContents = r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).run(conn))
-    else:
-        return jsonify(errorMessage = "Queried Block Number doesn't exist!")
 
 @app.route('/voucherApp/getOwnedIDs', methods=['GET'])
 def getOwnedIDs():
@@ -437,6 +427,7 @@ def getCustomerList():
     dataList = list(data)
     return json.dumps(dataList)
 
+
 @app.route('/voucherApp/getBlockContents', methods=['GET'])
 def getBlockDetails():
     # Specifying Mandatory Arguments
@@ -448,6 +439,7 @@ def getBlockDetails():
         return jsonify(blockDetails=list(r.db(DatabaseNames.BIGCHAIN.value).table(TableNames.BIGCHAIN.value).filter({"block_number":int(blockNumber)}).run(conn))[0])
     else:
         return jsonify(errorMessage = "Queried Block Number doesn't exist!")
+
 
 @app.route('/voucherApp/getHistory', methods=['GET'])
 def get_owned_assets():
@@ -465,7 +457,7 @@ def get_owned_assets():
         block_timestamp = datetime.datetime.fromtimestamp(temp_timestamp).strftime('%d %b %Y %H:%M:%S')
 
         for txn in txns:
-            temp = txn["transaction"]["data"]["payload"]
+            temp = dict((k, v) for k, v in txn["transaction"]["data"]["payload"].items())
             temp['txid'] = txn['id']
             temp['datetime'] = block_timestamp
             temp['timestamp'] = temp_timestamp
@@ -476,9 +468,11 @@ def get_owned_assets():
                     temp['type'] = 'CREATE'
                 elif temp['from'] == public_key:
                     temp['type'] = 'SENT'
-                    if 'combo' in temp:
-                        temp1 = txn["transaction"]["data"]["payload"]
+                    if 'combo' in temp and getUserType(public_key) == UserType.DONOR.value:
+                        temp1 = dict((k, v) for k, v in txn["transaction"]["data"]["payload"].items())
                         temp1['txid'] = txn['id']
+                        temp1['to'] = public_key
+                        temp1['from'] = public_key
                         temp1['datetime'] = block_timestamp
                         temp1['timestamp'] = temp_timestamp
                         temp1['type'] = "CREATE"
@@ -540,6 +534,9 @@ def isTransferValid(username1, username2, voucher):
 
 
 def getTupleFromDB(dbName, tableName, primary_key):
+    print(dbName)
+    print(tableName)
+    print(primary_key)
     return r.db(dbName).table(tableName).get(primary_key).run(conn)
 
 
