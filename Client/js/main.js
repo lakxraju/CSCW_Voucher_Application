@@ -121,8 +121,6 @@ app.controller('RegCtrl', function ($scope, $location, $http, $cookies) {
 
 app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cookies, $timeout, blockUI, $window) {
 
-
-    $scope.nameOfVoucher = "";
     $scope.valueOfVoucher = "";
     $scope.blockDetails = [];
 
@@ -207,6 +205,18 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
         // or server returns response with an error status.
     });
 
+    $http({
+        method: 'GET',
+        url: IPAddress + '/voucherApp/companys'
+    }).then(function successCallback(response) {
+
+        $scope.companyList = response.data
+
+    }, function errorCallback(response) {
+        // called asynchronously if an error occurs
+        // or server returns response with an error status.
+    });
+
 
     $scope.animationsEnabled = true;
 
@@ -237,8 +247,11 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             else if ($scope.items.usertype == 'Customer' || 'Company') {
 
                 console.log($scope.items.usertype)
-                blockUI.start("Transferring voucher...");
 
+                if ($scope.items.usertype == 'Customer')
+                    blockUI.start("Transferring voucher to " + transferData.name + " ...");
+                else if ($scope.items.usertype == 'Company')
+                    blockUI.start("Transferring voucher to " + transferData.donor + " ...");
                 $timeout(function () {
                     blockUI.message('Adding transaction to bigchain...');
                 }, 2000);
@@ -337,7 +350,9 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             size: size,
             resolve: {
                 items: function () {
-                    return {}
+                    return {
+                        'cList': $scope.companyList
+                    }
                 }
             }
 
@@ -355,7 +370,7 @@ app.controller('voucherCtrl', function ($scope, $filter, $http, $uibModal, $cook
             size: size,
             resolve: {
                 items: function () {
-                    return {}
+                    return {'cList': $scope.companyList}
                 }
             }
 
@@ -405,7 +420,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
     $scope.ok = function () {
 
 
-        blockUI.start("Transferring voucher...");
+        blockUI.start("Transferring voucher to " + $scope.selCust.username + " ...");
 
         $timeout(function () {
             blockUI.message('Adding transaction to bigchain...');
@@ -465,10 +480,14 @@ app.controller('ModalInstanceCtrl', function ($scope, $http, $uibModalInstance, 
 
 app.controller('ModalInstanceCtrl2', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
 
+
+    $scope.companyList = items.cList;
+    $scope.selComp = null;
+
     $scope.ok = function () {
 
         var trans_from = $cookies.get("user");
-        var vname = $scope.nameOfVoucher;
+        var vname = $scope.selComp.username;
         var vvalue = $scope.valueOfVoucher;
 
         console.log(trans_from);
@@ -530,10 +549,14 @@ app.controller('ModalInstanceCtrl3', function ($scope, $http, $uibModalInstance,
 
 app.controller('ModalInstanceCtrl4', function ($scope, $http, $uibModalInstance, items, $cookies, $window) {
 
+
+    $scope.companyList = items.cList;
+    $scope.selComp = null;
+
     $scope.ok = function () {
 
         var trans_from = $cookies.get("user");
-        var vname = $scope.nameOfVoucher;
+        var vname = $scope.selComp.username;
         var vvalue = $scope.valueOfVoucher;
 
         console.log(trans_from);
