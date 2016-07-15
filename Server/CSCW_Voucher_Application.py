@@ -468,9 +468,11 @@ def get_owned_assets():
                     temp['type'] = 'CREATE'
                 elif temp['from'] == public_key:
                     temp['type'] = 'SENT'
-                    if 'combo' in temp and getUserType(public_key) == UserType.DONOR:
+                    if 'combo' in temp and getUserType(public_key) == UserType.DONOR.value:
                         temp1 = dict((k, v) for k, v in txn["transaction"]["data"]["payload"].items())
                         temp1['txid'] = txn['id']
+                        temp1['to'] = public_key
+                        temp1['from'] = public_key
                         temp1['datetime'] = block_timestamp
                         temp1['timestamp'] = temp_timestamp
                         temp1['type'] = "CREATE"
